@@ -253,11 +253,13 @@ for(let i=0;i<14;i++){if(Math.sin(ts/340+i*1.9)>-0.1){const fx=(i*47+Math.sin(ts
 g.fillStyle='#071a0e';g.fillRect(0,gy,W,H-gy);g.fillStyle='#2c5a34';g.fillRect(0,gy,W,1);for(let i=0;i<34;i++){g.fillStyle=i%3?'#0f3018':'#1d4a2a';g.fillRect((i*57)%W,gy+2+(i*27)%Math.max(2,H-gy-3),2,1)}}
 else campBase(g,W,H,gy,ts)}
 function themeDecor(g,W,H,gy,ts,scene){const T=UITH;
-if(scene=='title'){if(T=='star'){pxPine(g,58,gy);pxPine(g,168,gy);pxPine(g,116,gy);pxTent(g,4,H-6);pxFire(g,152,H-8,ts)}
+if(scene=='titleB'){if(T=='star'){pxPine(g,58,gy);pxPine(g,168,gy);pxPine(g,116,gy)}
 else if(T=='moon')pxCastle(g,40,gy+3,115);
-else if(T=='milk')pxHouse(g,36,H-8,1);
 else if(T=='crystal'){pxPillar(g,4,gy+3,46);pxPillar(g,179,gy+3,46);pxBigCrystal(g,97,gy+4,66)}
-else if(T=='firefly'){pxCabin(g,4,H-8);pxTreeBig(g,164,gy+3)}}
+else if(T=='firefly')pxTreeBig(g,164,gy+3)}
+else if(scene=='titleF'){if(T=='star'){pxTent(g,4,H-6);pxFire(g,152,H-8,ts)}
+else if(T=='milk')pxHouse(g,36,H-8,1);
+else if(T=='firefly')pxCabin(g,4,H-8)}
 else if(scene=='home'){if(T=='star'){pxPine(g,84,gy);pxPine(g,178,gy);pxTent(g,2,H-4)}
 else if(T=='moon')pxCastle(g,50,gy+3,95);
 else if(T=='milk')pxHouse(g,24,84,.7);
@@ -272,9 +274,10 @@ const gy=H-34;
 if(UITH=='classic'){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#0f1a4a');gr.addColorStop(.55,'#3a6fc0');gr.addColorStop(1,'#9ad0f0');g.fillStyle=gr;g.fillRect(0,0,W,H);
 for(const st of TS){if(Math.sin(ts/300+st[2])>0){g.fillStyle='#fff';g.fillRect(st[0],st[1],1,1)}}
 for(let y=gy;y<H;y+=16)for(let x=0;x<W;x+=16)g.drawImage(IM.t,0,0,16,16,x,y,16,16);
-}else{sceneBG(g,W,H,gy,ts);themeDecor(g,W,H,gy,ts,'title');}
+}else{sceneBG(g,W,H,gy,ts);themeDecor(g,W,H,gy,ts,'titleB');}
 for(const p of TP){p.x+=p.s*dt;if(p.x>W+24){p.x=-26;p.c=Math.floor(Math.random()*100);p.r=Math.random()<.2?4:Math.floor(Math.random()*3);p.sh=Math.random()<.05}
-const col=[3,4,3,5][(ts/150+p.ph*4|0)%4];g.fillStyle='rgba(0,0,0,.25)';g.fillRect(p.x+6,gy+1,12,2);spr(g,p.c,p.r,p.sh,col,p.x,gy-16,0,false);if(p.sh&&Math.sin(ts/120+p.ph*9)>0){g.fillStyle='#fff';g.fillRect(p.x+2,gy-18,1,1);g.fillRect(p.x+20,gy-12,1,1)}}}
+const col=[3,4,3,5][(ts/150+p.ph*4|0)%4];g.fillStyle='rgba(0,0,0,.25)';g.fillRect(p.x+6,gy+1,12,2);spr(g,p.c,p.r,p.sh,col,p.x,gy-16,0,false);if(p.sh&&Math.sin(ts/120+p.ph*9)>0){g.fillStyle='#fff';g.fillRect(p.x+2,gy-18,1,1);g.fillRect(p.x+20,gy-12,1,1)}}
+if(UITH!='classic')themeDecor(g,W,H,gy,ts,'titleF');}
 function homeDraw(ts){const c=$('#hc');if(!c)return;const g=c.getContext('2d'),W=195,H=86;g.imageSmoothingEnabled=false;const gy=58;sceneBG(g,W,H,gy,ts);themeDecor(g,W,H,gy,ts,'home');
 let P=[0,1,2,3,4].map(i=>U(S.party[i])).filter(Boolean);if(!P.length)P=S.units.slice(0,5);
 const XS=UITH=='star'?[46,70,126,152,98]:[60,82,126,152,102],YS=[0,1,0,1,-5];
