@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ドットコレクション</title>
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>ドットコレクション</title>
 <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="icon" type="image/png" sizes="32x32" href="./icon-32.png">
@@ -17,7 +17,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:14px/1.
 .btn{background:var(--ac);color:#111;border:3px solid #fff;box-shadow:3px 3px 0 #000;padding:8px 12px;font:inherit;font-weight:bold;margin:4px}
 .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}.btn.g{background:#26335a;color:var(--tx);border-color:var(--gd)}.btn[disabled]{opacity:.4}
 .card{background:linear-gradient(180deg,#1d2947,#141d38);border:2px solid var(--gd);box-shadow:inset 0 0 0 2px #0b1226,inset 0 0 0 3px rgba(255,210,63,.35);border-radius:6px;padding:10px;margin:8px 0}
-img,canvas{image-rendering:pixelated}
+img,canvas{image-rendering:pixelated}html,body{touch-action:manipulation}body{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}input,textarea{user-select:text;-webkit-user-select:text}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.g4{grid-template-columns:repeat(4,1fr)}
 .cell{background:#10162a;border:3px solid #555;text-align:center;padding:2px;font-size:10px;position:relative}
 .cell img{width:100%;display:block}.cell.sel{outline:3px solid #fff}
@@ -181,7 +181,7 @@ return`<div class="card">${['通常','ピックアップ'].map((n,i)=>`<button c
 <canvas id="gc" class="uix" width="195" height="86" style="width:100%;display:block;border:2px solid var(--gd);border-radius:6px;margin-bottom:2px"></canvas><div class="card"><h3>${K.n}</h3>${b?`<div class="grid g4">${[...F.f5.map(c=>[c,4]),...F.f4.map(c=>[c,3])].map(([c,r])=>`<div class="cell" style="border-color:${RC[r]}"><img src="${icon(c,r,false)}"><div>${CH[c].n}</div><div style="color:${RC[r]}">${RN[r]} UP</div></div>`).join('')}</div><small>★5の約半分がピックアップ（前回外れたら次は確定）／★4の30%がピックアップ／あと${F.left}日で入れ替わり</small><br>`:''}
 天井まで あと${K.pity-pl}連（★5確定）<br><button class="btn" data-a="pull" data-i="1">単発 ${K.c}</button><button class="btn" data-a="pull" data-i="10">10連 ${K.c*10}</button><br><button class="btn g" data-a="odds">提供割合</button><br>重複の扱い：<button class="btn g" data-a="as">${S.as?'★2以下は自動売却':'凸に使う'}</button></div><div class="card"><small>10連は★3以上を1体保証。色違いは全排出で独立して1/512。天井は通常とピックアップで別カウントです。</small></div>`}
 function vAdv(){if(B)return`<div style="position:relative;border:3px solid var(--gd)"><canvas id="cv" width="195" height="190" style="width:100%;display:block;border:none"></canvas><canvas id="bt" width="390" height="380" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;image-rendering:auto"></canvas></div><div class="card"><span id="bl"></span> <button class="btn g" data-a="spd" id="bs">x${S.bsp||1}</button><button class="btn g" data-a="quit">撤退</button><br><small>味方をタップでスキル発動（●がたまったら・★3以上）</small><br><small>数字の ▲橙=有利 ▼青=不利 ／ 左上の字=属性（火→氷→雷→森→火、闇⇄聖）</small></div><div id="bres">${B.res||''}</div>`;
-return fmCard()+CHN.map((n,i)=>`<div class="card"><b>第${i+1}章 ${n}</b> ${i<S.prog?'✔':i>S.prog?'<svg width="13" height="13" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="#c9a227" stroke-width="3"/><rect x="5" y="10" width="14" height="10" fill="#c9a227"/><circle cx="12" cy="15" r="2" fill="#7a5c10"/></svg>':''}<br><small>推奨戦力 ${200+i*260}</small> <button class="btn" data-a="go" data-i="${i}" ${i>S.prog?'disabled':''}>出撃</button><button class="btn g" data-a="farm" data-i="${i}" ${i<S.prog?'':'disabled'}>周回</button></div>`).join('')}
+return fmCard()+CHN.map((n,i)=>`<div class="card"><b>第${i+1}章 ${n}</b> ${i<S.prog?'✔':i>S.prog?'<svg width="13" height="13" viewBox="0 0 24 24" style="vertical-align:-2px"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="#c9a227" stroke-width="3"/><rect x="5" y="10" width="14" height="10" fill="#c9a227"/><circle cx="12" cy="15" r="2" fill="#7a5c10"/></svg>':''}<br><small>推奨戦力 ${Math.round((800+i*240+i*i*15)/10)*10}</small> <button class="btn" data-a="go" data-i="${i}" ${i>S.prog?'disabled':''}>出撃</button><button class="btn g" data-a="farm" data-i="${i}" ${i<S.prog?'':'disabled'}>周回</button></div>`).join('')}
 const pw=a=>a.filter(Boolean).reduce((s,u)=>s+power(u),0),U=id=>S.units.find(u=>u.uid==id);
 function vParty(){const L=S.units.filter(u=>(!flt.e||CH[u.c].e==flt.e)&&(flt.r===''||u.r==flt.r)&&(!flt.s||u.sh)&&(!flt.fv||u.fav)&&(flt.ro===''||roleOf(u.c)==+flt.ro)&&(!flt.q||CH[u.c].n.includes(flt.q))).sort((a,b)=>flt.o=='r'?b.r-a.r||power(b)-power(a):flt.o=='l'?b.lv-a.lv:power(b)-power(a));
 const P=[0,1,2,3,4].map(i=>U(S.party[i]));
@@ -389,7 +389,7 @@ const misN=()=>mcnt(DM,dm())+mcnt(WM,wm())+ACH.filter(m=>!(S.ac||{})[m.id]&&m.f(
 let msub=0;
 function mrow(t,p,g,got,id,r){return`<div class="card"><b>${t}</b> ${Math.min(g,p)}/${g}<div style="background:#10162a;height:6px;margin:4px 0"><div style="background:#ffd23f;height:6px;width:${Math.min(1,p/g)*100}%"></div></div>報酬 GEM ${r} <button class="btn" data-a="mc" data-i="${id}" ${p>=g&&!got?'':'disabled'}>${got?'受取済み':'受け取る'}</button></div>`}
 function vMis(){const L=msub?WM:DM,d=msub?wm():dm(),kd=msub?'w':'d';S.ac=S.ac||{};
-let h=`<div class="card">${['デイリー','ウィークリー','実績'].map((n,i)=>`<button class="btn ${msub==i?'':'g'}" data-a="ms" data-i="${i}">${n}</button>`).join('')}</div>`;
+let h=`<div class="card">${['デイリー','ウィークリー','実績'].map((n,i)=>`<button class="btn ${msub==i?'':'g'}" data-a="ms" data-i="${i}">${n}</button>`).join('')}</div>`;h+=`<div class="card"><button class="btn" data-a="mca">全て受け取る</button> <small>達成済みの報酬（デイリー／ウィークリー／実績）をまとめて受け取ります</small></div>`;
 if(msub<2)h+=`<div class="card"><small>${msub?'毎週月曜0時':'毎日0時'}にリセット ／ 達成 ${L.filter(m=>(d.p[m.k]|0)>=m.g).length}/${L.length}</small></div>`+L.map(m=>mrow(m.n,d.p[m.k]|0,m.g,d.r[m.k],kd+':'+m.k,m.r)).join('')+`<div class="card"><b>全て受け取るとボーナス</b> GEM ${msub?AB.w:AB.d} <button class="btn" data-a="mc" data-i="${kd}:all" ${L.every(m=>d.r[m.k])&&!d.a?'':'disabled'}>${d.a?'受取済み':'受け取る'}</button></div>`;
 else h+=ACH.map(m=>mrow(m.n,m.f(),m.g,S.ac[m.id],'a:'+m.id,m.r)).join('');return h}
 // ---- friends
@@ -483,7 +483,7 @@ else if(a=='sb'){const c=cand(+i);if(c.length)ask(RN[+i]+'以下の通常版 '+c
 else if(a=='sb2'){const c=cand(+i);mis('sell');S.gems+=c.reduce((a,u)=>a+sellP(u),0);S.units=S.units.filter(u=>!c.includes(u));save();cl();render()}
 else if(a=='rnm')rnmV(+i);else if(a=='rnm2'){const v=$('#snmv').value.trim().slice(0,20);if(+i==cur){S.snm=v;save()}else{const d=rd(+i);if(d){d.snm=v;try{ST.setItem('dc1_s'+(+i),JSON.stringify(d))}catch(e){}}}if(TT)tslV();else{cl();render()}}else if(a=='rnmb'){if(TT)tslV();else cl()}else if(a=='bn'){S.gt=+i;save();render()}
 else if(a=='ms'){msub=+i;render()}
-else if(a=='mc'){const[kd,k]=i.split(':');if(kd=='a'){const m=ACH.find(x=>x.id==k);S.ac=S.ac||{};if(m&&!S.ac[k]&&m.f()>=m.g){S.ac[k]=1;S.gems+=m.r}}
+else if(a=='mca'){let tot=0;const dd=dm(),ww=wm();for(const m of DM)if(!dd.r[m.k]&&(dd.p[m.k]|0)>=m.g){dd.r[m.k]=1;S.gems+=m.r;tot+=m.r}if(DM.every(m=>dd.r[m.k])&&!dd.a){dd.a=1;S.gems+=AB.d;tot+=AB.d}for(const m of WM)if(!ww.r[m.k]&&(ww.p[m.k]|0)>=m.g){ww.r[m.k]=1;S.gems+=m.r;tot+=m.r}if(WM.every(m=>ww.r[m.k])&&!ww.a){ww.a=1;S.gems+=AB.w;tot+=AB.w}S.ac=S.ac||{};for(const m of ACH)if(!S.ac[m.id]&&m.f()>=m.g){S.ac[m.id]=1;S.gems+=m.r;tot+=m.r}save();render();if(tot)jin([72,76,79,84])}else if(a=='mc'){const[kd,k]=i.split(':');if(kd=='a'){const m=ACH.find(x=>x.id==k);S.ac=S.ac||{};if(m&&!S.ac[k]&&m.f()>=m.g){S.ac[k]=1;S.gems+=m.r}}
 else{const d=kd=='w'?wm():dm(),L=kd=='w'?WM:DM;if(k=='all'){if(L.every(m=>d.r[m.k])&&!d.a){d.a=1;S.gems+=kd=='w'?AB.w:AB.d}}else{const m=L.find(x=>x.k==k);if(m&&!d.r[k]&&(d.p[k]|0)>=m.g){d.r[k]=1;S.gems+=m.r}}}save();render()}
 else if(a=='frd')frdV();
 else if(a=='rk')rkV();
