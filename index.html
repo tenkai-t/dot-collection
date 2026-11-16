@@ -110,7 +110,7 @@ const SRC={"m": ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAfQCAYAAADv
 const EL={fire:'火',ice:'氷',thunder:'雷',heal:'森',dark:'闇',holy:'聖'},CYC=['fire','ice','thunder','heal'];
 const RN=['★1','★2','★3','★4','★5'],RM=[1,1.25,1.6,2.1,3],RC=['#aaa','#4cd964','#4a90e0','#a05ae0','#ffd23f'],SHINY=1/512,LM=[1,1.04,1.09,1.15,1.22,1.30];
 const CD=[99,99,3,3,2],cdOf=u=>u.r<2?99:Math.max(2,CD[u.r]-(u.lim>=5?1:0)),SKT=[{n:'強撃',m:2.8},{n:'守護の一撃',m:1.4},{n:'癒しの光',m:1.5},{n:'属性魔法',m:.85},{n:'鼓舞',m:0}],ROLES=['アタッカー','タンク','ヒーラー','魔法','サポート'],EFX={fire:3,ice:4,thunder:5,heal:6,dark:14,holy:13};
-const CHN=['はじまりの草原','さばくの遺跡','ゆきの山','暗い洞窟','ホタルの地下','さくらの丘','雨の石の城','ふぶきの峠','溶岩の火口','雷鳴の魔王城','ほしくずの砂漠','あまぐもの塔','ゆうやけの港','こおりの神殿','闇夜の墓地','さくらの戦場','熔岩の深淵','雷雲の要塞','星空の回廊','終わりの玉座'];
+const CHN=['はじまりの草原','さばくの遺跡','ゆきの山','暗い洞窟','ホタルの地下','さくらの丘','雨の石の城','ふぶきの峠','溶岩の火口','雷鳴の砦','ほしくずの砂漠','あまぐもの塔','ゆうやけの港','こおりの神殿','闇夜の墓地','さくらの戦場','熔岩の深淵','雷雲の要塞','星空の回廊','嵐の玉座'];
 const TH=[['grass',0],['sand',8],['snow',2],['cave_floor',6],['dungeon_floor',7],['grass',4],['stone_floor',1],['snow',3],['lava',8],['dungeon_floor',9],['sand',0],['stone_floor',4],['sand',4],['snow',6],['cave_floor',3],['grass',2],['lava',9],['dungeon_floor',8],['dungeon_floor',0],['dungeon_floor',9]];
 const $=s=>document.querySelector(s),rnd=s=>{s=Math.sin(s*9301+49297)*233280;return s-Math.floor(s)};
 function elMul(a,d){if(a=='dark'&&d=='holy'||a=='holy'&&d=='dark')return 1.5;const i=CYC.indexOf(a),j=CYC.indexOf(d);if(i<0||j<0)return 1;if((i+1)%4==j)return 1.5;if((j+1)%4==i)return .75;return 1}
