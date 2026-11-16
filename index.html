@@ -5,18 +5,18 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#1b2236">
 <style>
-:root{--bg:#1b2236;--pn:#2a3552;--ln:#8fa4d8;--tx:#eef2ff;--ac:#ffd23f}
+:root{--bg:#0d1530;--pn:#141d38;--ln:#8fa4d8;--tx:#eef2ff;--ac:#ffd23f;--gd:#c9a227}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:14px/1.4 monospace;overflow:hidden}
 #app{max-width:480px;margin:0 auto;height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
-#top{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--pn);border-bottom:3px solid var(--ln)}
+#top{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#101831;border-bottom:3px double var(--ac)}
 #main{flex:1;overflow-y:auto;padding:10px}
-#tabs{display:flex;background:var(--pn);border-top:3px solid var(--ln);padding-bottom:env(safe-area-inset-bottom)}
+#tabs{display:flex;background:#101831;border-top:3px double var(--ac);padding-bottom:env(safe-area-inset-bottom)}
 #tabs button{flex:1;padding:12px 0;background:none;border:0;color:var(--tx);font:inherit}
-#tabs .on{background:var(--ln);color:#111;font-weight:bold}
+#tabs .on{background:var(--ac);color:#111;font-weight:bold}
 .btn{background:var(--ac);color:#111;border:3px solid #fff;box-shadow:3px 3px 0 #000;padding:8px 12px;font:inherit;font-weight:bold;margin:4px}
-.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}.btn.g{background:#8fa4d8}.btn[disabled]{opacity:.4}
-.card{background:var(--pn);border:3px solid var(--ln);padding:8px;margin:6px 0}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}.btn.g{background:#26335a;color:var(--tx);border-color:var(--gd)}.btn[disabled]{opacity:.4}
+.card{background:linear-gradient(180deg,#1d2947,#141d38);border:2px solid var(--gd);box-shadow:inset 0 0 0 2px #0b1226,inset 0 0 0 3px rgba(255,210,63,.35);border-radius:6px;padding:10px;margin:8px 0}
 img,canvas{image-rendering:pixelated}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.g4{grid-template-columns:repeat(4,1fr)}
 .cell{background:#10162a;border:3px solid #555;text-align:center;padding:2px;font-size:10px;position:relative}
@@ -36,12 +36,30 @@ img,canvas{image-rendering:pixelated}
 @keyframes hl{0%,100%{background:none}50%{background:#ffd23f;color:#111}}#tabs .hl{animation:hl 1s infinite}
 #title{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;background:#1b2a5a;overflow:hidden}
 #tc{position:absolute;inset:0;width:100%;height:100%}
-.logo{position:relative;margin-top:11vh;text-align:center;font:bold 42px/1.1 monospace;color:#ffd23f;text-shadow:3px 3px 0 #a30,0 0 18px #f90,-2px -2px 0 rgba(255,255,255,.3)}
+.logo{position:relative;margin-top:11vh;text-align:center;font:bold 42px/1.1 "Hiragino Mincho ProN","Yu Mincho",serif;letter-spacing:2px;color:#ffd23f;text-shadow:3px 3px 0 #a30,0 0 18px #f90,-2px -2px 0 rgba(255,255,255,.3)}
 .logo small{display:block;font-size:13px;color:#cfe8ff;text-shadow:none;margin-top:8px;letter-spacing:3px}
 .tmenu{position:relative;margin-top:auto;margin-bottom:21vh;display:flex;flex-direction:column;align-items:center;gap:1px}
 .tapb{position:fixed;inset:0;background:none;border:0;color:#fff;font:bold 16px monospace;display:flex;align-items:flex-end;justify-content:center;padding-bottom:30vh;text-shadow:2px 2px 0 #000}
 .bk{animation:bk 1.2s steps(2) infinite}@keyframes bk{50%{opacity:0}}
 select,label{font:inherit;color:#111;margin:2px}h3{margin:6px 0}small{opacity:.8}
+
+#app{border-left:2px solid var(--gd);border-right:2px solid var(--gd);background:radial-gradient(1px 1px at 12% 22%,rgba(255,255,255,.5) 50%,transparent 51%),radial-gradient(1px 1px at 78% 8%,rgba(255,255,255,.4) 50%,transparent 51%),radial-gradient(1.5px 1.5px at 55% 64%,rgba(255,255,255,.28) 50%,transparent 51%),radial-gradient(1px 1px at 88% 44%,rgba(255,255,255,.35) 50%,transparent 51%),radial-gradient(1px 1px at 30% 82%,rgba(255,255,255,.25) 50%,transparent 51%),#0d1530}
+h3{color:var(--ac)}
+body.cls{--bg:#1b2236;--pn:#2a3552;--gd:#8fa4d8}
+body.cls #app{border:none;background:#1b2236}
+body.cls #top{background:var(--pn);border-bottom:3px solid var(--ln)}
+body.cls #tabs{background:var(--pn);border-top:3px solid var(--ln)}
+body.cls #tabs .on{background:var(--ln)}
+body.cls .card{background:var(--pn);border:3px solid var(--ln);box-shadow:none;border-radius:0}
+body.cls .btn.g{background:#8fa4d8;color:#111;border-color:#fff}
+body.cls .logo{font-family:monospace;letter-spacing:0}
+body.cls .tmenu.mp{background:none;border:none;box-shadow:none;border-radius:0;padding:0}
+body.cls h3{color:inherit}
+body.cls .cell{background:#10162a;border-color:#555}
+body.cls .uix{display:none!important}
+.tmenu.mp{background:rgba(8,13,32,.87);border:2px solid var(--gd);box-shadow:inset 0 0 0 2px #060a1c,inset 0 0 0 3px rgba(255,210,63,.35);border-radius:8px;padding:14px 18px}
+.cell{background:#0d1430;border-color:#3a4a75}
+.tag.f,.tag.b{border:1px solid rgba(255,255,255,.4);border-radius:4px;font-weight:bold}
 </style></head><body><div id="app"><div id="top"><b>ドットコレクション</b><span><span id="gm"></span> <button class="btn g" style="padding:2px 6px;margin:0" data-a="snd" id="mu">♪</button></span></div><div id="main"></div>
 <div id="tut"></div><div id="tabs"></div></div><div id="title"><canvas id="tc"></canvas><div class="logo">ドット<br>コレクション<small>DOT COLLECTION</small></div><div id="tm" class="tmenu"></div></div><div id="ov"></div>
 <script>
@@ -113,15 +131,16 @@ function render(){$('#gm').textContent='GEM '+S.gems;$('#mu').textContent=S.mute
 $('#tabs').innerHTML=TABS.map(t=>`<button class="${tab==t[0]?'on':tutTab()==t[0]?'hl':''}" data-a="tab" data-i="${t[0]}">${t[1]}${t[0]=='mis'&&misN()?'●':''}</button>`).join('');
 const m=$('#main');m.innerHTML=({home:vHome,adv:vAdv,gacha:vGacha,party:vParty,dex:vDex,mis:vMis})[tab]();if(tab=='adv'&&B)initCv();tutR();bgm()}
 function vHome(){const t=new Date().toDateString(),tot=S.units.length;
-return`<div class="card"><h3>ようこそ！</h3>所持ユニット ${tot}体 / 図鑑 ${Object.keys(S.dex).length}/200<br>クリア章 ${S.prog}/10 / 天井まで 通常あと${100-(S.pity|0)}連・PUあと${80-(S.pity2|0)}連</div>
-<div class="card"><button class="btn" data-a="login" ${S.login==t?'disabled':''}>ログインボーナス +300</button><button class="btn g" data-a="tr">チュートリアル</button><button class="btn g" data-a="ttl">タイトル</button></div><div class="card"><button class="btn" data-a="frd">フレンド（${(S.fr||[]).length}人）</button><button class="btn" data-a="rk">ランキング</button><br><small>コードを送り合って助っ人・順位比べ</small></div>${slotCard()}
+return`<canvas id="hc" class="uix" width="195" height="86" style="width:100%;display:block;border:2px solid var(--gd);border-radius:6px"></canvas><div class="uix" style="display:flex;gap:6px;margin-top:2px"><div class="card" style="flex:1;text-align:center;margin-bottom:0">📖 図鑑<br><b>${Object.keys(S.dex).length}/200</b></div><div class="card" style="flex:1;text-align:center;margin-bottom:0">🏯 クリア章<br><b>${S.prog}/10</b></div><div class="card" style="flex:1;text-align:center;margin-bottom:0">👥 所持<br><b>${tot}体</b></div></div>
+<div class="card"><h3>ようこそ！</h3>所持ユニット ${tot}体 / 図鑑 ${Object.keys(S.dex).length}/200<br>クリア章 ${S.prog}/10 / 天井まで 通常あと${100-(S.pity|0)}連・PUあと${80-(S.pity2|0)}連</div>
+<div class="card"><button class="btn" data-a="login" ${S.login==t?'disabled':''}>ログインボーナス +300</button><button class="btn g" data-a="tr">チュートリアル</button><button class="btn g" data-a="ttl">タイトル</button><button class="btn g" data-a="uiv">🎨 UI切替</button></div><div class="card"><button class="btn" data-a="frd">フレンド（${(S.fr||[]).length}人）</button><button class="btn" data-a="rk">ランキング</button><br><small>コードを送り合って助っ人・順位比べ</small></div>${slotCard()}
 <div class="card"><small>100体のドット絵キャラを集めて編成し、オートバトルで冒険しよう。ごくまれに色違い（シャイニー）が出る！</small></div>`}
 function vGacha(){const b=gt(),K=BN[b],F=feat(),pl=b?(S.pity2|0):(S.pity|0);
 return`<div class="card">${['通常','ピックアップ'].map((n,i)=>`<button class="btn ${b==i?'':'g'}" data-a="bn" data-i="${i}">${n}</button>`).join('')}</div>
-<div class="card"><h3>${K.n}</h3>${b?`<div class="grid g4">${[...F.f5.map(c=>[c,4]),...F.f4.map(c=>[c,3])].map(([c,r])=>`<div class="cell" style="border-color:${RC[r]}"><img src="${icon(c,r,false)}"><div>${CH[c].n}</div><div style="color:${RC[r]}">${RN[r]} UP</div></div>`).join('')}</div><small>★5の約半分がピックアップ（前回外れたら次は確定）／★4の30%がピックアップ／あと${F.left}日で入れ替わり</small><br>`:''}
+<canvas id="gc" class="uix" width="195" height="86" style="width:100%;display:block;border:2px solid var(--gd);border-radius:6px;margin-bottom:2px"></canvas><div class="card"><h3>${K.n}</h3>${b?`<div class="grid g4">${[...F.f5.map(c=>[c,4]),...F.f4.map(c=>[c,3])].map(([c,r])=>`<div class="cell" style="border-color:${RC[r]}"><img src="${icon(c,r,false)}"><div>${CH[c].n}</div><div style="color:${RC[r]}">${RN[r]} UP</div></div>`).join('')}</div><small>★5の約半分がピックアップ（前回外れたら次は確定）／★4の30%がピックアップ／あと${F.left}日で入れ替わり</small><br>`:''}
 天井まで あと${K.pity-pl}連（★5確定）<br><button class="btn" data-a="pull" data-i="1">単発 ${K.c}</button><button class="btn" data-a="pull" data-i="10">10連 ${K.c*10}</button><br><button class="btn g" data-a="odds">提供割合・確率検証</button><br>重複の扱い：<button class="btn g" data-a="as">${S.as?'★2以下は自動売却':'凸に使う'}</button></div><div class="card"><small>10連は★3以上を1体保証。色違いは全排出で独立して1/512。天井は通常とピックアップで別カウントです。</small></div>`}
-function vAdv(){if(B)return`<canvas id="cv" width="195" height="190" style="width:100%;border:3px solid var(--ln)"></canvas><div class="card"><span id="bl"></span> <button class="btn g" data-a="spd" id="bs">x1</button><button class="btn g" data-a="dsz" id="bz">数字 ${['小','中','大'][S.dsz===undefined?1:S.dsz]}</button><button class="btn g" data-a="quit">撤退</button><br><small>味方をタップでスキル発動（●がたまったら・★3以上）</small><br><small>数字の ▲橙=有利 ▼青=不利 ／ 左上の字=属性（火→氷→雷→森→火、闇⇄聖）</small></div><div id="bres">${B.res||''}</div>`;
-return fmCard()+CHN.map((n,i)=>`<div class="card"><b>第${i+1}章 ${n}</b> ${i<S.prog?'✔':''}<br><small>推奨戦力 ${200+i*260}</small> <button class="btn" data-a="go" data-i="${i}" ${i>S.prog?'disabled':''}>出撃</button><button class="btn g" data-a="farm" data-i="${i}" ${i<S.prog?'':'disabled'}>周回</button></div>`).join('')}
+function vAdv(){if(B)return`<canvas id="cv" width="195" height="190" style="width:100%;border:3px solid var(--gd)"></canvas><div class="card"><span id="bl"></span> <button class="btn g" data-a="spd" id="bs">x1</button><button class="btn g" data-a="dsz" id="bz">数字 ${['小','中','大'][S.dsz===undefined?1:S.dsz]}</button><button class="btn g" data-a="quit">撤退</button><br><small>味方をタップでスキル発動（●がたまったら・★3以上）</small><br><small>数字の ▲橙=有利 ▼青=不利 ／ 左上の字=属性（火→氷→雷→森→火、闇⇄聖）</small></div><div id="bres">${B.res||''}</div>`;
+return fmCard()+CHN.map((n,i)=>`<div class="card"><b>第${i+1}章 ${n}</b> ${i<S.prog?'✔':i>S.prog?'🔒':''}<br><small>推奨戦力 ${200+i*260}</small> <button class="btn" data-a="go" data-i="${i}" ${i>S.prog?'disabled':''}>出撃</button><button class="btn g" data-a="farm" data-i="${i}" ${i<S.prog?'':'disabled'}>周回</button></div>`).join('')}
 const pw=a=>a.filter(Boolean).reduce((s,u)=>s+power(u),0),U=id=>S.units.find(u=>u.uid==id);
 function vParty(){const L=S.units.filter(u=>(!flt.e||CH[u.c].e==flt.e)&&(flt.r===''||u.r==flt.r)&&(!flt.s||u.sh)&&(!flt.fv||u.fav)&&(flt.ro===''||roleOf(u.c)==+flt.ro)&&(!flt.q||CH[u.c].n.includes(flt.q))).sort((a,b)=>flt.o=='r'?b.r-a.r||power(b)-power(a):flt.o=='l'?b.lv-a.lv:power(b)-power(a));
 const P=[0,1,2,3,4].map(i=>U(S.party[i]));
@@ -137,16 +156,47 @@ let TT=0,TP=[],TS=[];
 function titleOn(m){TT=m||1;$('#title').style.display='flex';const c=$('#tc');c.width=195;c.height=Math.max(260,Math.ceil(195*innerHeight/innerWidth));
 TP=Array.from({length:8},(_,i)=>({c:Math.floor(Math.random()*100),r:Math.random()<.2?4:Math.floor(Math.random()*3),sh:Math.random()<.05,x:-20-i*38,s:10+Math.random()*10,ph:Math.random()}));
 TS=Array.from({length:32},()=>[Math.random()*195,Math.random()*c.height*.55,Math.random()*6]);titleM();bgm()}
-function titleM(){const e=$('#tm');if(TT==1){e.innerHTML='<button class="tapb" data-a="ttap"><span class="bk">▶ タップしてスタート</span></button>';return}
+function titleM(){const e=$('#tm');e.classList.toggle('mp',TT!=1);if(TT==1){e.innerHTML='<button class="tapb" data-a="ttap"><span class="bk">▶ タップしてスタート</span></button>';return}
 const nw=S.prog==0&&S.tut===0&&!S.st,w='style="min-width:210px"';
-e.innerHTML=`<small style="color:#cfe8ff;margin-bottom:6px">スロット${cur+1}：ユニット${S.units.length}体 ／ ${S.prog}章クリア</small><button class="btn" data-a="tgo" ${w}>${nw?'はじめる':'つづきから'}</button><button class="btn g" data-a="tsl" ${w}>スロット切替</button><button class="btn g" data-a="snd" ${w}>音量</button><button class="btn g" data-a="xfer" ${w}>データ移行</button><button class="btn g" data-a="ttr" ${w}>遊び方</button><small style="color:#9ab;margin-top:6px">Ver 1.0</small>`}
+e.innerHTML=`<small style="color:#cfe8ff;margin-bottom:6px">スロット${cur+1}：ユニット${S.units.length}体 ／ ${S.prog}章クリア</small><button class="btn" data-a="tgo" ${w}>${nw?'はじめる':'つづきから'}</button><button class="btn g" data-a="tsl" ${w}>スロット切替</button><button class="btn g" data-a="snd" ${w}>音量</button><button class="btn g" data-a="uiv" ${w}>🎨 UI切替</button><button class="btn g" data-a="xfer" ${w}>データ移行</button><button class="btn g" data-a="ttr" ${w}>遊び方</button><small style="color:#9ab;margin-top:6px">Ver 1.0</small>`}
 function tslV(){ov('<div style="width:100%">'+slotCard()+'<div class="card"><button class="btn g" data-a="tcl">閉じる</button></div></div>')}
+function pxMoon(g,cx,cy,r){g.fillStyle='#ffeeb0';for(let dy=-r;dy<=r;dy++){const w=Math.floor(Math.sqrt(r*r-dy*dy));g.fillRect(cx-w,cy+dy,w*2,1)}g.fillStyle='#f2d06b';g.fillRect(cx+r-3,cy-2,2,2);g.fillRect(cx-2,cy+r-3,2,1)}
+function pxMount(g,W,gy){g.fillStyle='#0a1434';for(let x=0;x<W;x+=3){const h=Math.max(0,26-Math.abs(x-42)*.75,0,19-Math.abs(x-148)*.8,0,12-Math.abs(x-100)*.9);if(h>0)g.fillRect(x,gy-h,3,h)}}
+function pxPine(g,x,gy){g.fillStyle='#081226';g.fillRect(x+3,gy-3,2,3);for(let i=0;i<4;i++)g.fillRect(x+3-i,gy-15+i*3,3+i*2,3)}
+function pxTent(g,x,by){for(let i=0;i<10;i++){const w=4+i*3.4;g.fillStyle=i<5?'#d98e3a':'#c07a2c';g.fillRect(x+(34-w)/2,by-20+i*2,w,2)}g.fillStyle='#3a2410';for(let i=0;i<7;i++){const w=2+i*1.1;g.fillRect(x+17-w/2,by-13+i*2,w,2)}g.fillStyle='#ffd23f';g.fillRect(x+15,by-7,4,5);g.fillStyle='#8a5a20';g.fillRect(x,by-1,36,1)}
+function pxFire(g,x,y,ts){g.fillStyle='rgba(255,150,50,.10)';g.beginPath();g.arc(x,y-4,13,0,7);g.fill();g.fillStyle='#5a3a1c';g.fillRect(x-7,y-1,15,2);g.fillRect(x-6,y-3,13,2);const f=Math.round(Math.sin(ts/90+x)*1.2);g.fillStyle='#e25822';g.fillRect(x-4,y-4,9,4);g.fillRect(x-3,y-8-f,7,5+f);g.fillRect(x-1,y-12-f,3,5);g.fillStyle='#f39c12';g.fillRect(x-2,y-3,5,3);g.fillRect(x-2,y-7-f,4,5+f);g.fillStyle='#ffeeb0';g.fillRect(x-1,y-4,2,4);if(Math.sin(ts/140+x*2)>0.3){g.fillStyle='#ffca7a';g.fillRect(x+5,y-15-f,1,1)}}
+function pxGem(g,x,by,h,col){for(let i=0;i<h;i++){const w=Math.max(1,Math.round((i<h/2?i+1:h-i)*1.7));g.fillStyle=col;g.fillRect(x-w/2,by-h+i,w,1)}g.fillStyle='rgba(255,255,255,.75)';g.fillRect(x-1,by-h+2,1,3)}
+function pxChest(g,cx,by,ts){g.fillStyle='rgba(122,224,255,.12)';g.beginPath();g.arc(cx,by-14,20,0,7);g.fill();
+g.fillStyle='#a06a28';g.fillRect(cx-15,by-27,30,3);g.fillRect(cx-18,by-24,36,4);g.fillRect(cx-20,by-20,40,3);
+g.fillStyle='#8a5a20';g.fillRect(cx-20,by-17,40,17);
+g.fillStyle='#ffd23f';g.fillRect(cx-20,by-18,40,2);g.fillRect(cx-15,by-17,3,17);g.fillRect(cx+12,by-17,3,17);
+g.fillStyle='#5a3a1c';g.fillRect(cx-20,by-9,40,1);
+g.fillStyle='#ffd23f';g.fillRect(cx-4,by-19,8,10);g.fillStyle=Math.sin(ts/300)>0?'#aef':'#7ae0ff';g.fillRect(cx-2,by-16,4,4)}
+function campBase(g,W,H,gy,ts){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#060a26');gr.addColorStop(.6,'#101f4d');gr.addColorStop(1,'#1b2a5a');g.fillStyle=gr;g.fillRect(0,0,W,H);
+for(let i=0;i<28;i++){const sx=(i*67)%W,sy=(i*41)%Math.max(8,gy-14);if(Math.sin(ts/300+i*1.3)>0){g.fillStyle='#fff';g.fillRect(sx,sy,1,1)}}
+pxMount(g,W,gy);pxMoon(g,W-30,16,8);
+g.fillStyle='#0a1428';g.fillRect(0,gy,W,H-gy);g.fillStyle='#23365e';g.fillRect(0,gy,W,1);
+for(let i=0;i<40;i++){g.fillStyle=i%3?'#101f42':'#16264a';g.fillRect((i*53)%W,gy+2+(i*29)%(H-gy-3),2,1)}}
 function titleDraw(dt,ts){const c=$('#tc'),g=c.getContext('2d'),W=195,H=c.height;g.imageSmoothingEnabled=false;
-const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#0f1a4a');gr.addColorStop(.55,'#3a6fc0');gr.addColorStop(1,'#9ad0f0');g.fillStyle=gr;g.fillRect(0,0,W,H);
-for(const t of TS){if(Math.sin(ts/300+t[2])>0){g.fillStyle='#fff';g.fillRect(t[0],t[1],1,1)}}
-const id=TL.grass,gy=H-34;for(let y=gy;y<H;y+=16)for(let x=0;x<W;x+=16)g.drawImage(IM.t,(id%8)*16,((id/8)|0)*16,16,16,x,y,16,16);
+const gy=H-34;
+if(document.body.classList.contains('cls')){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#0f1a4a');gr.addColorStop(.55,'#3a6fc0');gr.addColorStop(1,'#9ad0f0');g.fillStyle=gr;g.fillRect(0,0,W,H);
+for(const st of TS){if(Math.sin(ts/300+st[2])>0){g.fillStyle='#fff';g.fillRect(st[0],st[1],1,1)}}
+for(let y=gy;y<H;y+=16)for(let x=0;x<W;x+=16)g.drawImage(IM.t,0,0,16,16,x,y,16,16);
+}else{campBase(g,W,H,gy,ts);
+pxPine(g,58,gy);pxPine(g,168,gy);pxPine(g,116,gy);
+pxTent(g,4,H-6);pxFire(g,152,H-8,ts);}
 for(const p of TP){p.x+=p.s*dt;if(p.x>W+24){p.x=-26;p.c=Math.floor(Math.random()*100);p.r=Math.random()<.2?4:Math.floor(Math.random()*3);p.sh=Math.random()<.05}
 const col=[3,4,3,5][(ts/150+p.ph*4|0)%4];g.fillStyle='rgba(0,0,0,.25)';g.fillRect(p.x+6,gy+1,12,2);spr(g,p.c,p.r,p.sh,col,p.x,gy-16,0,false);if(p.sh&&Math.sin(ts/120+p.ph*9)>0){g.fillStyle='#fff';g.fillRect(p.x+2,gy-18,1,1);g.fillRect(p.x+20,gy-12,1,1)}}}
+function homeDraw(ts){const c=$('#hc');if(!c)return;const g=c.getContext('2d'),W=195,H=86;g.imageSmoothingEnabled=false;const gy=58;campBase(g,W,H,gy,ts);
+pxPine(g,84,gy);pxPine(g,178,gy);pxTent(g,2,H-4);
+let P=[0,1,2,3,4].map(i=>U(S.party[i])).filter(Boolean);if(!P.length)P=S.units.slice(0,5);
+const XS=[46,70,126,152,98],YS=[0,1,0,1,-5];
+P.slice(0,5).forEach((u,i)=>{const x=XS[i],bob=Math.sin(ts/350+i*2.1)>0?0:-1,y=gy-14+YS[i]+bob;g.fillStyle='rgba(0,0,0,.25)';g.fillRect(x+6,gy+3+YS[i],12,2);spr(g,u.c,u.r,u.sh,0,x,y,0,i>=2);if(u.sh&&Math.sin(ts/120+i*2)>0){g.fillStyle='#fff';g.fillRect(x+2,y-2,1,1);g.fillRect(x+20,y+4,1,1)}})
+pxFire(g,100,H-6,ts)}
+function gachaDraw(ts){const c=$('#gc');if(!c)return;const g=c.getContext('2d'),W=195,H=86;g.imageSmoothingEnabled=false;campBase(g,W,H,60,ts);pxGem(g,20,72,16,'#7ae0ff');pxGem(g,32,72,10,'#c07dff');pxGem(g,163,72,13,'#c07dff');pxGem(g,176,72,18,'#7ae0ff');pxChest(g,97,74,ts);for(let i=0;i<3;i++){if(Math.sin(ts/240+i*2.2)>0.2){g.fillStyle='#fff';const sx=60+i*36,sy=18+((i*13)%10);g.fillRect(sx,sy,1,3);g.fillRect(sx-1,sy+1,3,1)}}}
+function uiV(){const cur=localStorage.getItem('dc_ui')=='classic'?1:0;ov(`<div class="card" style="width:100%"><h3>🎨 UIを選ぶ</h3><button class="btn ${cur?'g':''}" data-a="uith" data-i="0" style="min-width:210px">星灯りの冒険端末 ${cur?'':'（使用中）'}</button><br><button class="btn ${cur?'':'g'}" data-a="uith" data-i="1" style="min-width:210px">クラシック（従来） ${cur?'（使用中）':''}</button><br><small>選んだUIはこの端末に保存されます。候補は今後追加できます。</small><br><button class="btn" data-a="cl">閉じる</button></div>`)}
+function setUI(n){localStorage.setItem('dc_ui',n?'classic':'star');document.body.classList.toggle('cls',!!n);cl();if(TT)titleM();else render()}
+if(localStorage.getItem('dc_ui')=='classic')document.body.classList.add('cls');
 // ---- tutorial
 const TUT=[{tab:'home',x:'ようこそ！100体のドット絵キャラを集めて編成し、オートで戦う収集ゲームです。流れを4ステップで案内します。'},
 {tab:'party',x:'① 編成：前衛3・後衛2に5体を並べます。「おまかせ配置」で自動配置。枠をタップ→ユニットをタップでも変更できます。'},
@@ -279,10 +329,10 @@ for(const f of B.fx){const fr=Math.min(7,f.t/.7*8|0);g.drawImage(IM.f,fr*32,f.ro
 const wr=th[1],wf=(B.t*12|0)%16;if(wr==9){const a=[0,0,0,0,.8,.25,.6,.1,0,0,0,0,0,0,0,0][wf];if(a){g.globalAlpha=a;g.fillStyle='#fff';g.fillRect(0,0,195,190);g.globalAlpha=1}}else for(let y=0;y<6;y++)for(let x=0;x<7;x++)g.drawImage(IM.w,wf*32,wr*32,32,32,x*32,y*32,32,32);
 g.textAlign='center';g.lineJoin='round';for(const p of B.pp){g.font='bold '+(DZ[S.dsz===undefined?1:S.dsz]+(p.cr?3:0))+'px monospace';g.lineWidth=2.5;g.strokeStyle='#000';g.strokeText(p.s,p.x,p.y-p.t*14);g.fillStyle=p.c;g.fillText(p.s,p.x,p.y-p.t*14)}
 $('#bl').textContent='第'+(B.ch+1)+'章 '+CHN[B.ch]+' '+Math.min(6,B.w+1)+'/6';}
-function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;if(ts-lb>500){lb=ts;bgm()}if(TT)titleDraw(dt,ts);if(tab=='adv'&&B&&$('#cv')){B.t+=dt;upd(dt*B.spd);draw()}requestAnimationFrame(loop)}
+function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;if(ts-lb>500){lb=ts;bgm()}if(TT)titleDraw(dt,ts);else if(tab=='home')homeDraw(ts);else if(tab=='gacha')gachaDraw(ts);if(tab=='adv'&&B&&$('#cv')){B.t+=dt;upd(dt*B.spd);draw()}requestAnimationFrame(loop)}
 // ---- events
 document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,i=t.dataset.i;UNL=1;ac();snd(440,.05);
-if(a=='tab'){tab=i;render()}else if(a=='login'){S.gems+=300;mis('lg');S.login=new Date().toDateString();save();render()}
+if(a=='tab'){tab=i;render()}else if(a=='uiv'){uiV()}else if(a=='uith'){setUI(+i)}else if(a=='login'){S.gems+=300;mis('lg');S.login=new Date().toDateString();save();render()}
 else if(a=='sw'){save();cur=+i;const d=rd(cur);if(d){S=d;if(S.tut===undefined)S.tut=99}else fresh();B=null;sel=null;save();render();if(TT){tslV();titleM()}}
 else if(a=='del')ask(+i==cur?'このスロットを初期化しますか？':'スロット'+(+i+1)+'を削除しますか？','del2',i)
 else if(a=='del2'){ST.removeItem('dc1_s'+i);if(+i==cur){fresh();B=null;save()}cl();render();if(TT){tslV();titleM()}}
