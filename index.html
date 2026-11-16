@@ -110,8 +110,8 @@ const SRC={"m": ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAfQCAYAAADv
 const EL={fire:'火',ice:'氷',thunder:'雷',heal:'森',dark:'闇',holy:'聖'},CYC=['fire','ice','thunder','heal'];
 const RN=['★1','★2','★3','★4','★5'],RM=[1,1.25,1.6,2.1,3],RC=['#aaa','#4cd964','#4a90e0','#a05ae0','#ffd23f'],SHINY=1/512,LM=[1,1.04,1.09,1.15,1.22,1.30];
 const CD=[99,99,3,3,2],cdOf=u=>u.r<2?99:Math.max(2,CD[u.r]-(u.lim>=5?1:0)),SKT=[{n:'強撃',m:2.8},{n:'守護の一撃',m:1.4},{n:'癒しの光',m:1.5},{n:'属性魔法',m:.85},{n:'鼓舞',m:0}],ROLES=['アタッカー','タンク','ヒーラー','魔法','サポート'],EFX={fire:3,ice:4,thunder:5,heal:6,dark:14,holy:13};
-const CHN=['はじまりの草原','さばくの遺跡','ゆきの山','暗い洞窟','ホタルの地下','さくらの丘','雨の石の城','ふぶきの峠','溶岩の火口','雷鳴の魔王城'];
-const TH=[['grass',0],['sand',8],['snow',2],['cave_floor',6],['dungeon_floor',7],['grass',4],['stone_floor',1],['snow',3],['lava',8],['dungeon_floor',9]];
+const CHN=['はじまりの草原','さばくの遺跡','ゆきの山','暗い洞窟','ホタルの地下','さくらの丘','雨の石の城','ふぶきの峠','溶岩の火口','雷鳴の魔王城','ほしくずの砂漠','あまぐもの塔','ゆうやけの港','こおりの神殿','闇夜の墓地','さくらの戦場','熔岩の深淵','雷雲の要塞','星空の回廊','終わりの玉座'];
+const TH=[['grass',0],['sand',8],['snow',2],['cave_floor',6],['dungeon_floor',7],['grass',4],['stone_floor',1],['snow',3],['lava',8],['dungeon_floor',9],['sand',0],['stone_floor',4],['sand',4],['snow',6],['cave_floor',3],['grass',2],['lava',9],['dungeon_floor',8],['dungeon_floor',0],['dungeon_floor',9]];
 const $=s=>document.querySelector(s),rnd=s=>{s=Math.sin(s*9301+49297)*233280;return s-Math.floor(s)};
 function elMul(a,d){if(a=='dark'&&d=='holy'||a=='holy'&&d=='dark')return 1.5;const i=CYC.indexOf(a),j=CYC.indexOf(d);if(i<0||j<0)return 1;if((i+1)%4==j)return 1.5;if((j+1)%4==i)return .75;return 1}
 const roleOf=c=>(c*7+3)%5;
@@ -121,7 +121,7 @@ if(ro==0)atk*=1.5;if(ro==1){hp*=1.6;df*=1.4;atk*=.7}if(ro==2)atk*=.8;if(ro==3)at
 return{hp:hp*m,atk:atk*m,def:df*m,spd:sp*(1+.01*(u.r))}}
 const power=u=>{const s=stats(u);return Math.round(s.hp/5+s.atk*3+s.def*2+s.spd*2)};
 // ---- state
-let S=null,cur=0;const NS=3,DEF=()=>({gems:1500,units:[],party:[],dex:{},pity:0,prog:0,login:'',uid:1,mute:0,ts:0});
+let S=null,cur=0;const NS=10,DEF=()=>({gems:1500,units:[],party:[],dex:{},pity:0,prog:0,login:'',uid:1,mute:0,ts:0});
 const ST=(()=>{try{localStorage.setItem('_t','1');localStorage.removeItem('_t');return localStorage}catch(e){const m={};return{getItem:k=>k in m?m[k]:null,setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]}}}})();
 function fresh(){S=DEF();[0,1,2,3,4].forEach(c=>addUnit({c,r:0,sh:false}));S.party=S.units.map(u=>u.uid);S.tut=0}
 function save(){S.ts=Date.now();try{ST.setItem('dc1_s'+cur,JSON.stringify(S));ST.setItem('dc1_cur',cur)}catch(e){}}
@@ -200,6 +200,7 @@ TS=Array.from({length:32},()=>[Math.random()*195,Math.random()*c.height*.55,Math
 function titleM(){const e=$('#tm');e.classList.toggle('mp',TT!=1);if(TT==1){e.innerHTML='<button class="tapb" data-a="ttap"><span class="bk">▶ タップしてスタート</span></button>';return}
 const nw=S.prog==0&&S.tut===0&&!S.st,w='style="min-width:210px"';
 e.innerHTML=`<small style="color:#cfe8ff;margin-bottom:6px">スロット${cur+1}：ユニット${S.units.length}体 ／ ${S.prog}章クリア</small><button class="btn" data-a="tgo" ${w}>${nw?'はじめる':'つづきから'}</button><button class="btn g" data-a="tsl" ${w}>スロット切替</button><button class="btn g" data-a="snd" ${w}>音量</button><button class="btn g" data-a="uiv" ${w}>UI切替</button><button class="btn g" data-a="xfer" ${w}>データ移行</button><button class="btn g" data-a="ttr" ${w}>遊び方</button><small style="color:#9ab;margin-top:6px">Ver 1.0</small>`}
+function rnmV(i){const d=i==cur?S:rd(i);if(!d)return;ov(`<div class="card" style="width:100%"><h3>セーブの名前</h3><input id="snmv" value="${(d.snm||'').replace(/"/g,'&quot;')}" maxlength="20" placeholder="スロット${i+1}" style="width:90%"><br><button class="btn" data-a="rnm2" data-i="${i}">保存</button> <button class="btn g" data-a="rnmb">戻る</button></div>`)}
 function tslV(){ov('<div style="width:100%">'+slotCard()+'<div class="card"><button class="btn g" data-a="tcl">閉じる</button></div></div>')}
 function pxMoon(g,cx,cy,r){g.fillStyle='#ffeeb0';for(let dy=-r;dy<=r;dy++){const w=Math.floor(Math.sqrt(r*r-dy*dy));g.fillRect(cx-w,cy+dy,w*2,1)}g.fillStyle='#f2d06b';g.fillRect(cx+r-3,cy-2,2,2);g.fillRect(cx-2,cy+r-3,2,1)}
 function pxMount(g,W,gy){g.fillStyle='#0a1434';for(let x=0;x<W;x+=3){const h=Math.max(0,26-Math.abs(x-42)*.75,0,19-Math.abs(x-148)*.8,0,12-Math.abs(x-100)*.9);if(h>0)g.fillRect(x,gy-h,3,h)}}
@@ -355,7 +356,7 @@ function statH(u){const x=stats(u);return`HP ${Math.round(x.hp)} ／ ATK ${Math.
 function unitV(id){const u=U(id);if(!u)return;const ro=roleOf(u.c),inP=S.party.includes(id);
 ov(`<div class="card" style="width:100%;border-color:${RC[u.r]}"><div style="display:flex;gap:10px;align-items:center"><img src="${icon(u.c,u.r,u.sh)}" style="width:72px"><div><b>${CH[u.c].n}</b> ${u.sh?'✦色違い':''}<br><span style="color:${RC[u.r]}">${RN[u.r]}</span> Lv${u.lv} 凸${u.lim}<br>${EL[CH[u.c].e]}属性 ／ ${ROLES[ro]}</div></div><hr>${statH(u)}<br><small>レア倍率×${RM[u.r]}${u.sh?' ／ 色違い×1.1':''}（Lv・凸の補正込み）</small><hr>${limT(u)}<hr><b>スキル「${EL[CH[u.c].e]}の${SKT[ro].n}」</b> ${u.r>=2?'':'（★3以上で使用可）'}<br>${skD(ro)}<br><small>${u.r>=2?'通常攻撃'+CD[u.r]+'回ごとに発動':'★3で3回ごと、★5は2回ごとに発動'}</small><br><button class="btn" data-a="pt" data-i="${id}">${inP?'編成から外す':'編成に入れる'}</button><button class="btn g" data-a="fv" data-i="${id}">${u.fav?'♥お気に入り解除':'♡お気に入り'}</button>${inP||u.fav?'':`<button class="btn g" data-a="sl" data-i="${id}">売却 +${sellP(u)}</button>`}${u.fav?'<br><small>お気に入りは売却できません</small>':''}<button class="btn g" data-a="cl">閉じる</button></div>`)}
 function ask(m,a,i){ov(`<div class="card"><p>${m}</p><button class="btn" data-a="${a}" data-i="${i}">はい</button><button class="btn g" data-a="cl">いいえ</button></div>`)}
-function slotCard(){let h='<div class="card"><h3>セーブデータ</h3>';for(let i=0;i<NS;i++){const d=i==cur?S:rd(i);h+=`<div class="card" style="${i==cur?'border-color:#ffd23f':''}"><b>スロット${i+1}</b> ${i==cur?'（使用中）':''}<br>${d?`ユニット${d.units.length}体 ／ GEM ${d.gems} ／ ${d.prog}章クリア<br><small>${d.ts?new Date(d.ts).toLocaleString():''}</small>`:'<small>空き</small>'}<br>${i==cur?'':`<button class="btn" data-a="sw" data-i="${i}">${d?'切り替え':'新規開始'}</button>`}${d?`<button class="btn g" data-a="del" data-i="${i}">${i==cur?'初期化':'削除'}</button>`:''}</div>`}
+function slotCard(){let h='<div class="card"><h3>セーブデータ</h3>';for(let i=0;i<NS;i++){const d=i==cur?S:rd(i);h+=`<div class="card" style="${i==cur?'border-color:#ffd23f':''}"><b>${d&&d.snm?esc(d.snm):'スロット'+(i+1)}</b> ${i==cur?'（使用中）':''}<br>${d?`ユニット${d.units.length}体 ／ GEM ${d.gems} ／ ${d.prog}章クリア<br><small>${d.ts?new Date(d.ts).toLocaleString():''}</small>`:'<small>空き</small>'}<br>${i==cur?'':`<button class="btn" data-a="sw" data-i="${i}">${d?'切り替え':'新規開始'}</button>`}${d?`<button class="btn g" data-a="del" data-i="${i}">${i==cur?'初期化':'削除'}</button>`:''}${d?`<button class="btn g" data-a="rnm" data-i="${i}">名前</button>`:''}</div>`}
 return h+'<button class="btn" data-a="xfer">データ移行（書き出し／読み込み）</button></div>'}
 const snap=()=>({g:S.gems,p:S.pity,r:S.prog,l:S.login,m:S.mute?1:0,a:S.as?1:0,b:S.bgm===0?0:1,q:S.pity2|0,w:S.g5?1:0,t:S.gt|0,x:S.st||{},y:Object.keys(S.ac||{}),f:S.fr||[],e:me(),h:S.hp||'',rk:Object.values(S.rk||{}).map(e=>e.c),pz:prs().map(x=>({n:x.n,p:x.p})),u:S.units.map(u=>[u.uid,u.c,u.r,u.sh?1:0,u.lv,u.lim,u.fav?1:0]),pt:S.party,d:Object.keys(S.dex),vb:S.vb,vs:S.vs,dz:S.dsz});
 const FMT=3,b64=t=>btoa(unescape(encodeURIComponent(t))),unb=t=>decodeURIComponent(escape(atob(t))),envl=()=>({app:'dot-collection',v:FMT,t:Date.now(),d:snap()});
@@ -377,7 +378,7 @@ const ACH=[{id:'d1',n:'図鑑（通常）10体',g:10,f:()=>dexN('n'),r:100},{id:
 {id:'s1',n:'色違いを1体入手',g:1,f:()=>dexN('s'),r:500},{id:'s2',n:'色違い図鑑 10体',g:10,f:()=>dexN('s'),r:2000},
 {id:'p1',n:'ガチャ累計100回',g:100,f:()=>stv('pl'),r:300},{id:'p2',n:'ガチャ累計500回',g:500,f:()=>stv('pl'),r:1000},
 {id:'r1',n:'★5を入手',g:1,f:()=>stv('r5'),r:200},{id:'r2',n:'★5を累計10体入手',g:10,f:()=>stv('r5'),r:1000},{id:'u1',n:'ピックアップ★5を入手',g:1,f:()=>stv('pu5'),r:300},
-{id:'c1',n:'全10章クリア',g:10,f:()=>S.prog,r:1000},{id:'w1',n:'ウェーブ累計300回クリア',g:300,f:()=>stv('wv'),r:500},{id:'w2',n:'ウェーブ累計1500回クリア',g:1500,f:()=>stv('wv'),r:1500},
+{id:'c1',n:'全20章クリア',g:20,f:()=>S.prog,r:1000},{id:'w1',n:'ウェーブ累計300回クリア',g:300,f:()=>stv('wv'),r:500},{id:'w2',n:'ウェーブ累計1500回クリア',g:1500,f:()=>stv('wv'),r:1500},
 {id:'l1',n:'凸5のユニットを作る',g:1,f:()=>S.units.filter(u=>u.lim>=5).length,r:300},{id:'o1',n:'ユニット50体所持',g:50,f:()=>S.units.length,r:300},{id:'v1',n:'Lv50に到達',g:50,f:()=>Math.max(1,...S.units.map(u=>u.lv)),r:500},{id:'f1',n:'フレンドを1人登録',g:1,f:()=>(S.fr||[]).length,r:200}];
 function wk(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7)).toDateString()}
 function dm(){const t=new Date().toDateString();if(!S.dm||S.dm.d!=t)S.dm={d:t,p:{},r:{},a:0};return S.dm}
@@ -439,7 +440,7 @@ else if(u.an=='atk'||u.an=='cast'){const th=u.an=='atk'?.25:.4,du=u.an=='atk'?.5
 b.fx.forEach(f=>f.t+=dt);b.fx=b.fx.filter(f=>f.t<.7);b.pp.forEach(p=>p.t+=dt);b.pp=b.pp.filter(p=>p.t<.8);
 if(b.st=='run'){if(!alive(b.en).length){b.w++;mis('wv');if(b.w>5){win()}else{b.st='next';b.nt=1}}else if(!alive(b.al).length){lose()}}}
 let FM=0,FN=0,FG=0;
-function winH(){const b=B,t=b.win.t;return`<div class="card"><b>クリア！</b> +${t} GEM ／ 編成ユニット Lv+1${b.hp?'（助っ人ボーナス込み）':''}${FM?`<br>周回 ${FN}回目 ／ 累計 +${FG} GEM`:''}<br>${FM?'<button class="btn" data-a="fstop">周回を止める</button>':`<button class="btn" data-a="quit">戻る</button><button class="btn g" data-a="go" data-i="${b.ch}">もう一度</button>${b.ch<9&&S.prog>b.ch?`<button class="btn g" data-a="go" data-i="${b.ch+1}">次の章へ</button>`:''}`}</div>`}
+function winH(){const b=B,t=b.win.t;return`<div class="card"><b>クリア！</b> +${t} GEM ／ 編成ユニット Lv+1${b.hp?'（助っ人ボーナス込み）':''}${FM?`<br>周回 ${FN}回目 ／ 累計 +${FG} GEM`:''}<br>${FM?'<button class="btn" data-a="fstop">周回を止める</button>':`<button class="btn" data-a="quit">戻る</button><button class="btn g" data-a="go" data-i="${b.ch}">もう一度</button>${b.ch<19&&S.prog>b.ch?`<button class="btn g" data-a="go" data-i="${b.ch+1}">次の章へ</button>`:''}`}</div>`}
 function win(){const b=B,g=60+b.ch*25,hb=b.hp?30:0;mis('cl');if(b.hp)mis('fr');let bonus=0;if(S.prog==b.ch){S.prog++;bonus=200}const t=g+bonus+hb;S.gems+=t;S.party.map(U).filter(Boolean).forEach(u=>u.lv=Math.min(50,u.lv+1));save();b.st='win';b.win={t};jin([72,76,79,84]);
 if(FM){FN++;FG+=t;setTimeout(()=>{if(FM&&B===b&&b.st=='win'&&tab=='adv')startB(b.ch)},1800)}b.res=winH();const e=$('#bres');if(e)e.innerHTML=b.res}
 function lose(){const b=B;b.st='lose';FM=0;jin([67,64,60,55]);S.party.map(U).filter(Boolean).forEach(u=>u.lv=Math.min(50,u.lv+1));save();b.res='<div class="card"><b>全滅…</b> 経験を積んだ！ 編成ユニットLv+1<br><button class="btn" data-a="quit">戻る</button><button class="btn g" data-a="go" data-i="'+b.ch+'">再挑戦</button></div>';const e=$('#bres');if(e)e.innerHTML=b.res}
@@ -480,7 +481,7 @@ else if(a=='sl'){const u=U(+i);if(u&&!S.party.includes(u.uid)&&!u.fav)ask(CH[u.c
 else if(a=='sl2'){const u=U(+i);if(u&&!S.party.includes(u.uid)&&!u.fav){mis('sell');S.gems+=sellP(u);S.units=S.units.filter(x=>x!==u);save()}cl();render()}
 else if(a=='sb'){const c=cand(+i);if(c.length)ask(RN[+i]+'以下の通常版 '+c.length+'体を売却します。+'+c.reduce((a,u)=>a+sellP(u),0)+' GEM。よろしいですか？','sb2',i)}
 else if(a=='sb2'){const c=cand(+i);mis('sell');S.gems+=c.reduce((a,u)=>a+sellP(u),0);S.units=S.units.filter(u=>!c.includes(u));save();cl();render()}
-else if(a=='bn'){S.gt=+i;save();render()}
+else if(a=='rnm')rnmV(+i);else if(a=='rnm2'){const v=$('#snmv').value.trim().slice(0,20);if(+i==cur){S.snm=v;save()}else{const d=rd(+i);if(d){d.snm=v;try{ST.setItem('dc1_s'+(+i),JSON.stringify(d))}catch(e){}}}if(TT)tslV();else{cl();render()}}else if(a=='rnmb'){if(TT)tslV();else cl()}else if(a=='bn'){S.gt=+i;save();render()}
 else if(a=='ms'){msub=+i;render()}
 else if(a=='mc'){const[kd,k]=i.split(':');if(kd=='a'){const m=ACH.find(x=>x.id==k);S.ac=S.ac||{};if(m&&!S.ac[k]&&m.f()>=m.g){S.ac[k]=1;S.gems+=m.r}}
 else{const d=kd=='w'?wm():dm(),L=kd=='w'?WM:DM;if(k=='all'){if(L.every(m=>d.r[m.k])&&!d.a){d.a=1;S.gems+=kd=='w'?AB.w:AB.d}}else{const m=L.find(x=>x.k==k);if(m&&!d.r[k]&&(d.p[k]|0)>=m.g){d.r[k]=1;S.gems+=m.r}}}save();render()}
