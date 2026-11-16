@@ -25,6 +25,15 @@ img,canvas{image-rendering:pixelated}
 @keyframes rb{0%{border-color:#f44}25%{border-color:#ff4}50%{border-color:#4f4}75%{border-color:#4af}100%{border-color:#f4f}}
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:30;overflow-y:auto;padding:12px}
 #pil{width:30px;height:0;transition:height .9s;box-shadow:0 0 30px 12px currentColor;background:#fff}
+.gshk{animation:gshk .09s infinite}
+@keyframes gshk{0%{transform:translate(0,0)}25%{transform:translate(1px,-1px)}50%{transform:translate(-1px,1px)}75%{transform:translate(1px,1px)}100%{transform:translate(0,0)}}
+.gpop{animation:gpop .45s both}
+@keyframes gpop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.gspk{position:absolute;width:6px;height:6px;pointer-events:none;animation:gspk .8s ease-out both;z-index:5}
+@keyframes gspk{0%{transform:translate(0,0) rotate(0deg);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(200deg);opacity:0}}
+.gsil{filter:brightness(0)}
+.gbeam2{width:34px;margin:0 auto;height:0;transition:height .5s;background:#fff}
+.wfl{position:fixed;inset:0;pointer-events:none;background:#fff;opacity:0;z-index:10;animation:fl .7s}
 .rbw{position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,#f44,#ff4,#4f4,#4af,#f4f);opacity:0;z-index:10;animation:fl 1.6s}
 @keyframes fl{0%{opacity:.9}100%{opacity:0}}
 @keyframes pk{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}}
@@ -301,11 +310,38 @@ e.innerHTML=`<div class="card" style="margin:0;border-color:#ffd23f"><b>チュ�
 // ---- overlays
 const ov=h=>{$('#ov').innerHTML=h;$('#ov').style.display='flex'},cl=()=>{$('#ov').style.display='none';clearInterval(mt)};let mt=0;
 function doPull(n){const bn=gt(),cost=n*BN[bn].c;if(S.gems<cost){ov('<div class="card">ジェムが足りません<br><button class="btn" data-a="cl">閉じる</button></div>');return}S.gems-=cost;const rs=rollSet(n,S,bn).map(x=>({...addUnit(x),x}));mis('pl',n);const p5=rs.filter(r=>r.x.pu&&r.x.r==4);p5.forEach(()=>mis('pu5'));save();render();
-const mx=Math.max(...rs.map(r=>r.x.r)),any=rs.some(r=>r.x.sh),pc=rs.filter(r=>r.x.pu).length;snd(300+mx*120,.4);
-ov(`<div id="pil" style="color:${any?'#fff':p5.length?'#ffd23f':bn==1?'#ff9ad5':RC[mx]}"></div><div id="rs" style="display:none;width:100%"></div>`);setTimeout(()=>$('#pil').style.height='300px',30);
+const mx=Math.max(...rs.map(r=>r.x.r)),any=rs.some(r=>r.x.sh),pc=rs.filter(r=>r.x.pu).length;
 const show=()=>{const e=$('#rs');if(!e)return;$('#pil').style.display='none';e.style.display='block';e.innerHTML=(any?'<h3 style="text-align:center;color:#ffd23f">色が違う…！？ ✦</h3>':'')+(bn&&pc?`<h3 style="text-align:center;color:#ffd23f">★ PICK UP ${pc}体 ★</h3>`:'')+`<div class="grid ${n==1?'':'g4'}" style="${n==1?'width:40%;margin:auto':''}">${rs.map(r=>`<div class="cell ${r.x.sh?'sh':''} ${r.x.pu?'pug':''}" style="border-color:${RC[r.x.r]}"><img src="${icon(r.x.c,r.x.r,r.x.sh)}"><div>${CH[r.x.c].n}</div><div style="color:${RC[r.x.r]}">${RN[r.x.r]}${r.x.sh?'✦':''}</div><div>${r.x.pu?'PICKUP ':''}${r.dup==0?'NEW':r.dup==1?'凸UP':'+'+r.g+'G'}</div></div>`).join('')}</div><div style="text-align:center"><button class="btn" data-a="cl">OK</button></div>`};
-setTimeout(()=>{if(any){document.body.insertAdjacentHTML('beforeend','<div class="rbw"></div>');setTimeout(()=>{const x=document.querySelector('.rbw');x&&x.remove()},1700);snd(900,.8,'sawtooth')}
-if(p5.length){document.body.insertAdjacentHTML('beforeend','<div class="gbw"></div>');setTimeout(()=>{const x=document.querySelector('.gbw');x&&x.remove()},1900);jin([72,76,79,84,88]);const r=p5[0],e=$('#rs');if(!e)return;$('#pil').style.display='none';e.style.display='block';e.innerHTML=`<div style="text-align:center"><div class="pk">PICK UP!</div><img src="${icon(r.x.c,4,r.x.sh)}" style="width:150px"><h3>${CH[r.x.c].n}</h3></div>`;setTimeout(show,1700)}else show()},1100)}
+gachaShow(rs,n,bn,mx,any,pc,show)}
+function gachaShow(rs,n,bn,mx,any,pc,show){let i=0,tm=[],done=false;const upg=rs.findIndex(r=>r.x.r==4);
+const later=(f,ms)=>{tm.push(setTimeout(()=>{if(!done&&$('#gst'))f()},ms))};
+const flash=(cls,ms)=>{document.body.insertAdjacentHTML('beforeend',`<div class="${cls}"></div>`);setTimeout(()=>{const x=document.querySelector('.'+cls);x&&x.remove()},ms)};
+ov(`<div id="gst" style="width:100%;max-width:340px;margin:auto;text-align:center;position:relative"><canvas id="gcx" width="195" height="110" style="width:78%;image-rendering:pixelated" class="gshk"></canvas><div id="gbeam" class="gbeam2" style="color:${any?'#fff':mx==4?'#ffd23f':RC[mx]};box-shadow:0 0 30px 12px currentColor"></div><div id="gstage" style="min-height:196px;position:relative"></div><div id="gctl" style="min-height:44px"><button class="btn g" id="gskip">スキップ</button></div></div><div id="pil" style="display:none"></div><div id="rs" style="display:none;width:100%"></div>`);
+const cv=$('#gcx'),g=cv.getContext('2d');g.imageSmoothingEnabled=false;sceneBG(g,195,110,88,0);themeDecor(g,195,110,88,0,'gacha');pxChest(g,97,86,0);
+snd(160,.07,'square');later(()=>snd(160,.07,'square'),300);later(()=>snd(160,.07,'square'),600);later(()=>snd(300+mx*120,.4),950);
+later(()=>{cv.classList.remove('gshk');flash(any?'rbw':mx==4?'gbw':'wfl',any?1700:mx==4?1900:750);const b=$('#gbeam');if(b)b.style.height='110px'},1000);
+later(()=>{const b=$('#gbeam');if(b)b.style.display='none';cv.style.display='none';next()},1750);
+$('#gskip').onclick=()=>summary();
+function burst(col){const st=$('#gstage');if(!st)return;for(let k=0;k<16;k++){const s=document.createElement('span');s.className='gspk';s.style.background=k%3?'#fff':col;s.style.left='50%';s.style.top='70px';s.style.setProperty('--dx',(Math.random()*220-110)+'px');s.style.setProperty('--dy',(Math.random()*160-60)+'px');st.appendChild(s);setTimeout(()=>s.remove(),850)}}
+function summary(){if(done)return;done=true;tm.forEach(clearTimeout);const s=$('#gst');if(s)s.style.display='none';show()}
+function reveal(){const r=rs[i],st=$('#gstage');if(!st)return;const img=st.querySelector('img');if(!img)return;const myI=i,fake=i==upg;
+const fin=(big)=>{img.classList.remove('gsil');img.classList.add('gpop');if(big)img.style.width='132px';st.querySelector('.gnm').innerHTML=`<div style="font-size:17px;font-weight:bold">${CH[r.x.c].n}${r.x.sh?' ✦':''}</div><div style="color:${RC[r.x.r]};font-weight:bold">${RN[r.x.r]}${r.x.pu?' PICK UP!':''}</div><div>${r.dup==0?'NEW':r.dup==1?'凸UP':'+'+r.g+'G'}</div>`};
+if(r.x.sh){flash('rbw',1700);snd(900,.8,'sawtooth')}
+if(fake){img.classList.remove('gsil');img.classList.add('gpop');st.querySelector('.gnm').innerHTML=`<div style="font-size:17px;font-weight:bold">${CH[r.x.c].n}</div><div style="color:${RC[3]};font-weight:bold">★4</div><div>${r.dup==0?'NEW':r.dup==1?'凸UP':'+'+r.g+'G'}</div>`;snd(520,.3);
+later(()=>{flash('gbw',1900);jin([72,76,79,84,88]);burst('#ffd23f');const fr=img.parentElement;if(fr)fr.style.borderColor=RC[4];fin(1);snd(880,.5)},800)}
+else if(r.x.r==4){flash('gbw',1900);jin([72,76,79,84,88]);burst('#ffd23f');fin(1)}
+else if(r.x.r==3){burst('#c77dff');fin(0);snd(560,.3)}
+else{fin(0);snd(400+i*30+r.x.r*40,.22)}
+$('#gctl').innerHTML=i==n-1?'<button class="btn" id="gok">結果を見る</button>':'<button class="btn" id="gnx">次へ</button> <button class="btn g" id="gsk2">スキップ</button>';
+const nx=$('#gnx');if(nx)nx.onclick=()=>{i++;next()};const ok=$('#gok');if(ok)ok.onclick=summary;const sk=$('#gsk2');if(sk)sk.onclick=summary;
+later(()=>{if(i==myI){i++;if(i<n)next();else summary()}},fake?2300:1500)}
+function next(){if(done)return;if(i>=n){summary();return}const r=rs[i],st=$('#gstage');if(!st)return;
+st.innerHTML=`<div style="display:inline-block;border:3px solid ${r.x.sh?'#fff':i==upg?RC[3]:RC[r.x.r]};border-radius:10px;padding:10px 14px;background:rgba(0,0,0,.35)"><img class="gsil" src="${icon(r.x.c,r.x.r,r.x.sh)}" style="width:96px"><div class="gnm" style="min-height:52px"><div style="opacity:.75">? ? ?</div><div>${i+1} / ${n}</div></div></div>`;
+$('#gctl').innerHTML='<span style="opacity:.8">タップで登場</span>';
+snd(300+i*25,.15);
+st.onclick=()=>{st.onclick=null;reveal()};
+later(()=>{if(st.querySelector('.gsil'))reveal()},850)}
+}
 function oddsV(){ov(`<div class="card" style="width:100%"><h3>提供割合</h3>${BN.map(b=>`<b>${b.n}</b>（天井${b.pity}連・1回${b.c}GEM）<br>${RN.map((n,i)=>`${n} ${b.rate[i]}%`).join(' / ')}<br>`).join('')}ピックアップ：★5が出たとき50%が対象（前回外れていたら確定）、★4の30%が対象<br>色違い 1/512（約0.195%、レアリティと独立）／10連は★3以上を1体保証<br><button class="btn" data-a="sim" data-i="0">通常 1万回</button><button class="btn" data-a="sim" data-i="1">PU 1万回</button><div id="sr"></div><button class="btn g" data-a="cl">閉じる</button></div>`)}
 function dexV(i){const mot={ko:[0,[0,1,2,3],1],cast:[1,[4,5,6,7],1],atk:[0,[9,10,11,12],0],hurt:[0,[13,14],0]};let cur='atk',k=dexS?1:0;
 ov(`<div class="card" style="width:100%"><b>${CH[i].n}</b> ${EL[CH[i].e]}属性 / ${ROLES[roleOf(i)]}<br><canvas id="dcv" width="96" height="20" style="width:100%"></canvas><br><canvas id="dc2" width="24" height="20" style="width:40%"></canvas><br><b>スキル「${EL[CH[i].e]}の${SKT[roleOf(i)].n}」</b> ${skD(roleOf(i))}<br><small>★3以上で使用可（★3・★4は3回ごと、★5は2回ごと）</small><br><table style="width:100%;font-size:11px;text-align:center"><tr><td>Lv1</td><td>HP</td><td>ATK</td><td>DEF</td><td>SPD</td></tr>${[0,1,2,3,4].map(r=>{const x=stats({c:i,r,sh:!!dexS,lv:1,lim:0});return`<tr style="color:${RC[r]}"><td>${RN[r]}</td><td>${x.hp|0}</td><td>${x.atk|0}</td><td>${x.def|0}</td><td>${x.spd.toFixed(1)}</td></tr>`}).join("")}</table><small>Lv・凸で上昇／色違いは+10%</small><br>${['atk','hurt','cast','ko'].map(m=>`<button class="btn g" data-a="mo" data-i="${m}">${{atk:'攻撃',hurt:'被弾',cast:'魔法',ko:'倒れる'}[m]}</button>`).join('')}<br><button class="btn" data-a="cl">閉じる</button></div>`);
