@@ -132,7 +132,7 @@ if(e){if(e.lim<5&&!(S.as&&o.r<=1&&!o.sh&&!e.fav)){e.lim++;return{dup:1,u:e}}cons
 // ---- gacha
 const BN=[{n:'通常ガチャ',rate:[50,28,15,6,1],pity:100,c:50},{n:'ピックアップガチャ',rate:[48,27,15,7,3],pity:80,c:60}];
 const gt=()=>S.gt==1?1:0;
-const VER='2026.11.17-2229';
+const VER='1.01';
 function feat(){const w=Math.floor(Date.now()/604800000),p=(o,k)=>Math.floor(rnd(w*31+o+k*7)*100);let a=[p(1,0),p(1,1)];if(a[1]==a[0])a[1]=(a[1]+1)%100;let b=[p(5,0),p(5,1)];b=b.filter(x=>!a.includes(x));if(b.length<2)b=[(a[0]+17)%100,(a[1]+31)%100];return{f5:a,f4:b,left:7-Math.floor((Date.now()%604800000)/86400000)}}
 function rollR(min,b){const R=BN[b|0].rate,t=R.slice(min||0).reduce((a,x)=>a+x,0);let x=Math.random()*t,a=0;for(let i=min||0;i<5;i++){a+=R[i];if(x<a)return i}return 4}
 function rollSet(n,st,b){b=b|0;const pk=b==1?'pity2':'pity',F=feat(),out=[];let has=0;for(let i=0;i<n;i++){let r;if((st[pk]|0)>=BN[b].pity-1)r=4;else r=(n==10&&i==9&&!has)?rollR(2,b):rollR(0,b);if(r>=2)has=1;st[pk]=r==4?0:(st[pk]|0)+1;let c=Math.floor(Math.random()*100);
