@@ -103,6 +103,25 @@ body.ff .btn.g{background:#1d4a2a;color:var(--tx);border-color:#a8792a}
 body.ff .cell{background:#07160c;border-color:#3a6a42}
 body.ff .logo{color:#ffca7a;text-shadow:3px 3px 0 #4a2c10}
 body.ff h3{color:#ffca7a}
+
+.sn{--bg:#2a1438;--pn:#3c1e40;--ln:#e88ca0;--tx:#fff3e6;--ac:#ffb84d;--gd:#e8a13a}
+.ds{--bg:#02141f;--pn:#06303f;--ln:#3fa7b8;--tx:#e6fbff;--ac:#57e6dc;--gd:#3fa7b8}
+.sk{--bg:#fff0f3;--pn:#fffafa;--ln:#e8a0b4;--tx:#4a2436;--ac:#ff7a9e;--gd:#d98a4a}
+
+
+body.sk #app{background:#fff0f3}
+body.sk #top,body.sk #tabs{background:#fffafa}
+body.sk .card{background:#fffafa;box-shadow:inset 0 0 0 2px #fff,inset 0 0 0 3px rgba(232,160,180,.5);border-radius:10px}
+body.sk .btn{color:#fff}
+body.sk .btn.g{background:#ffd9e4;color:#7a2c44;border-color:#fff}
+body.sk #tabs .on{color:#fff}
+body.sk .cell{background:#fff5f7;border-color:#e8a0b4}
+body.sk .logo{color:#a03a54;text-shadow:2px 2px 0 #ffd9e4}
+body.sk .logo small{color:#a03a54}
+body.sk .tmenu.mp{background:rgba(255,250,250,.95)}
+body.sk .tmenu small{color:#7a2c44!important}
+body.sk h3{color:#c24a6e}
+body.sk .bk{color:#7a2c44;text-shadow:1px 1px 0 #fff}
 </style></head><body><div id="app"><div id="top"><b>ドットコレクション</b><span><span id="gm"></span> <button class="btn g" style="padding:2px 6px;margin:0" data-a="snd" id="mu">♪</button></span></div><div id="main"></div>
 <div id="tut"></div><div id="tabs"></div></div><div id="title"><canvas id="tc"></canvas><div class="logo">ドット<br>コレクション<small>DOT COLLECTION</small></div><div id="tm" class="tmenu"></div></div><div id="ov"></div>
 <script>
@@ -132,7 +151,7 @@ if(e){if(e.lim<5&&!(S.as&&o.r<=1&&!o.sh&&!e.fav)){e.lim++;return{dup:1,u:e}}cons
 // ---- gacha
 const BN=[{n:'通常ガチャ',rate:[50,28,15,6,1],pity:100,c:50},{n:'ピックアップガチャ',rate:[48,27,15,7,3],pity:80,c:60}];
 const gt=()=>S.gt==1?1:0;
-const VER='2.01';
+const VER='2.02';
 function feat(){const w=Math.floor(Date.now()/604800000),p=(o,k)=>Math.floor(rnd(w*31+o+k*7)*100);let a=[p(1,0),p(1,1)];if(a[1]==a[0])a[1]=(a[1]+1)%100;let b=[p(5,0),p(5,1)];b=b.filter(x=>!a.includes(x));if(b.length<2)b=[(a[0]+17)%100,(a[1]+31)%100];return{f5:a,f4:b,left:7-Math.floor((Date.now()%604800000)/86400000)}}
 function rollR(min,b){const R=BN[b|0].rate,t=R.slice(min||0).reduce((a,x)=>a+x,0);let x=Math.random()*t,a=0;for(let i=min||0;i<5;i++){a+=R[i];if(x<a)return i}return 4}
 function rollSet(n,st,b){b=b|0;const pk=b==1?'pity2':'pity',F=feat(),out=[];let has=0;for(let i=0;i<n;i++){let r;if((st[pk]|0)>=BN[b].pity-1)r=4;else r=(n==10&&i==9&&!has)?rollR(2,b):rollR(0,b);if(r>=2)has=1;st[pk]=r==4?0:(st[pk]|0)+1;let c=Math.floor(Math.random()*100);
@@ -247,6 +266,9 @@ function pxCloud(g,x,y){g.fillStyle='rgba(255,255,255,.92)';g.fillRect(x,y,26,5)
 function pxTreeBig(g,x,gy){g.fillStyle='#0a2012';g.fillRect(x+8,gy-10,5,10);g.beginPath();g.arc(x+10,gy-22,9,0,7);g.arc(x+2,gy-15,6,0,7);g.arc(x+18,gy-15,6,0,7);g.fill()}
 function stars(g,W,gy,ts,n,col){for(let i=0;i<n;i++){const sx=(i*67)%W,sy=(i*41)%Math.max(8,gy-14);if(Math.sin(ts/300+i*1.3)>0){g.fillStyle=col;g.fillRect(sx,sy,1,1)}}}
 function sceneBG(g,W,H,gy,ts){let gr;
+if(UITH=='sunset'){gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#2b1055');gr.addColorStop(.45,'#7b2d5e');gr.addColorStop(.78,'#c75146');gr.addColorStop(1,'#f2a65a');g.fillStyle=gr;g.fillRect(0,0,W,H);g.fillStyle='#ffd29d';g.beginPath();g.arc(W*.66,gy-12,13,0,7);g.fill();g.fillStyle='#ffedb8';g.beginPath();g.arc(W*.66,gy-12,9,0,7);g.fill();g.fillStyle='#5e2a3a';g.beginPath();g.ellipse(26,gy+7,64,11,0,0,7);g.fill();g.beginPath();g.ellipse(168,gy+9,72,13,0,0,7);g.fill();g.fillStyle='#33182c';g.fillRect(0,gy,W,H-gy);g.fillStyle='#f2a65a';g.fillRect(0,gy,W,1);for(let i=0;i<30;i++){g.fillStyle=i%3?'#4a2438':'#5e2a3a';g.fillRect((i*61)%W,gy+2+(i*23)%Math.max(2,H-gy-3),2,1)}return}
+if(UITH=='deepsea'){gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#02141f');gr.addColorStop(.6,'#063a52');gr.addColorStop(1,'#0a4a5e');g.fillStyle=gr;g.fillRect(0,0,W,H);g.globalAlpha=.07;g.fillStyle='#bff6ff';for(let i=0;i<3;i++){const rx=24+i*62;g.beginPath();g.moveTo(rx,0);g.lineTo(rx+12,0);g.lineTo(rx+30,gy);g.lineTo(rx+8,gy);g.closePath();g.fill()}g.globalAlpha=1;for(let i=0;i<14;i++){const bx=(i*47)%W,by=gy-((ts/45+i*23)%Math.max(10,gy+8));g.fillStyle=i%2?'#9fe8f2':'#57c8dc';g.fillRect(bx,by,i%3?1:2,i%3?1:2)}g.fillStyle='#04222e';g.fillRect(0,gy,W,H-gy);g.fillStyle='#2c7a8c';g.fillRect(0,gy,W,1);for(let i=0;i<30;i++){g.fillStyle=i%3?'#083344':'#0a4256';g.fillRect((i*59)%W,gy+2+(i*23)%Math.max(2,H-gy-3),2,1)}return}
+if(UITH=='sakura'){gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#ffd9e6');gr.addColorStop(.55,'#ffeeda');gr.addColorStop(1,'#fff8ec');g.fillStyle=gr;g.fillRect(0,0,W,H);g.fillStyle='#ffb7c9';g.beginPath();g.arc(30,15,9,0,7);g.fill();g.fillStyle='#ffd9e4';g.beginPath();g.arc(30,15,6,0,7);g.fill();g.fillStyle='#f2b8c6';g.beginPath();g.ellipse(30,gy+8,70,10,0,0,7);g.fill();g.beginPath();g.ellipse(170,gy+10,76,12,0,0,7);g.fill();for(let i=0;i<10;i++){const px=((i*53)%W+Math.sin(ts/700+i)*3+W)%W,py=((ts/55+i*29)%(gy+14));g.fillStyle=i%2?'#ff9eb8':'#ffc2d4';g.fillRect(px,py,2,1)}g.fillStyle='#f7e3c2';g.fillRect(0,gy,W,H-gy);g.fillStyle='#e8a0b4';g.fillRect(0,gy,W,1);for(let i=0;i<26;i++){g.fillStyle=i%3?'#f2d5ae':'#ffc2d4';g.fillRect((i*61)%W,gy+2+(i*23)%Math.max(2,H-gy-3),2,1)}return}
 if(UITH=='moon'){gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#03061a');gr.addColorStop(.6,'#0a1434');gr.addColorStop(1,'#12224d');g.fillStyle=gr;g.fillRect(0,0,W,H);stars(g,W,gy,ts,30,'#fff');pxMoon(g,W-36,20,11);
 g.fillStyle='#0a1226';g.fillRect(0,gy,W,H-gy);g.fillStyle='#2a3c66';g.fillRect(0,gy,W,1);for(let i=0;i<40;i++){g.fillStyle=i%3?'#0e1a38':'#14244a';g.fillRect((i*53)%W,gy+2+(i*29)%Math.max(2,H-gy-3),2,1)}}
 else if(UITH=='milk'){gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#7ec8f7');gr.addColorStop(.55,'#bfe8ff');gr.addColorStop(1,'#fdf3df');g.fillStyle=gr;g.fillRect(0,0,W,H);
@@ -262,6 +284,12 @@ for(let i=0;i<14;i++){if(Math.sin(ts/340+i*1.9)>-0.1){const fx=(i*47+Math.sin(ts
 g.fillStyle='#071a0e';g.fillRect(0,gy,W,H-gy);g.fillStyle='#2c5a34';g.fillRect(0,gy,W,1);for(let i=0;i<34;i++){g.fillStyle=i%3?'#0f3018':'#1d4a2a';g.fillRect((i*57)%W,gy+2+(i*27)%Math.max(2,H-gy-3),2,1)}}
 else campBase(g,W,H,gy,ts)}
 function themeDecor(g,W,H,gy,ts,scene){const T=UITH;
+if(T=='sunset'&&(scene=='titleB'||scene=='home')){g.fillStyle='#241026';g.fillRect(18,gy-12,2,12);g.fillRect(40,gy-12,2,12);g.beginPath();g.moveTo(12,gy);g.lineTo(31,gy-17);g.lineTo(50,gy);g.closePath();g.fillStyle='#3a1c30';g.fill();g.fillStyle='#f2a65a';g.fillRect(28,gy-5,6,5);g.fillStyle='#241026';for(let i=0;i<6;i++){g.fillRect(148-i*1,gy-14+i*2,2,2)}for(const dx of[-9,-5,0,5,9]){g.fillRect(150+dx,gy-16-Math.abs(dx)/2,2,4)}g.fillStyle='#2c7a4a';g.fillRect(96,gy-6,1,6);g.fillRect(95,gy-8,3,2);return}
+if(T=='sunset'&&scene=='titleF'){g.fillStyle='#1c0c20';g.fillRect(6,gy+2,10,3);g.fillRect(178,gy+3,12,3);return}
+if(T=='deepsea'&&(scene=='titleB'||scene=='home')){g.fillStyle='#0d5a3a';for(const bx of[16,168]){for(let i=0;i<7;i++){g.fillRect(bx+Math.sin(i/1.6)*2,gy-3-i*2,2,3)}}g.fillStyle='#e86a92';for(const bx of[86,104]){g.fillRect(bx,gy-4,2,4);g.fillRect(bx-3,gy-7,2,4);g.fillRect(bx+3,gy-8,2,5)}g.fillStyle='#f2a65a';g.fillRect(60,gy-2,3,2);g.fillRect(130,gy-2,3,2);return}
+if(T=='deepsea'&&scene=='titleF'){g.fillStyle='#052a38';g.fillRect(10,gy+3,8,2);g.fillRect(176,gy+2,9,2);return}
+if(T=='sakura'&&(scene=='titleB'||scene=='home')){g.fillStyle='#7a4a3a';g.fillRect(152,gy-14,3,14);g.fillRect(146,gy-12,2,6);g.fillStyle='#ff9eb8';for(const c of[[142,gy-18,9],[156,gy-21,11],[168,gy-17,8],[150,gy-14,8],[162,gy-13,7]]){g.beginPath();g.arc(c[0],c[1],c[2],0,7);g.fill()}g.fillStyle='#ffd9e4';for(const c of[[148,gy-19,5],[160,gy-16,5]]){g.beginPath();g.arc(c[0],c[1],c[2],0,7);g.fill()}g.fillStyle='#e2543e';g.fillRect(16,gy-16,26,3);g.fillRect(19,gy-13,20,2);g.fillRect(20,gy-13,3,13);g.fillRect(35,gy-13,3,13);return}
+if(T=='sakura'&&scene=='titleF'){g.fillStyle='#b08a7a';g.fillRect(8,gy+1,5,7);g.fillRect(7,gy,7,2);g.fillRect(182,gy+1,5,7);g.fillRect(181,gy,7,2);return}
 if(scene=='titleB'){if(T=='star'){pxPine(g,58,gy);pxPine(g,168,gy);pxPine(g,116,gy)}
 else if(T=='moon')pxCastle(g,40,gy+3,115);
 else if(T=='crystal'){pxPillar(g,4,gy+3,46);pxPillar(g,179,gy+3,46);pxBigCrystal(g,97,gy+4,66)}
@@ -292,8 +320,8 @@ let P=[0,1,2,3,4].map(i=>U(S.party[i])).filter(Boolean);if(!P.length)P=S.units.s
 const XS=UITH=='star'?[46,70,126,152,98]:[60,82,126,152,102],YS=[0,1,0,1,-5];
 P.slice(0,5).forEach((u,i)=>{const x=XS[i],bob=Math.sin(ts/350+i*2.1)>0?0:-1,y=gy-14+YS[i]+bob;g.fillStyle='rgba(0,0,0,.25)';g.fillRect(x+6,gy+3+YS[i],12,2);sprU(g,u,0,x,y,i>=2);if(u.sh&&Math.sin(ts/120+i*2)>0){g.fillStyle='#fff';g.fillRect(x+2,y-2,1,1);g.fillRect(x+20,y+4,1,1)}})
 if(UITH=='star')pxFire(g,100,H-6,ts)}
-function gachaDraw(ts){const c=$('#gc');if(!c)return;const g=c.getContext('2d'),W=195,H=86;g.imageSmoothingEnabled=false;sceneBG(g,W,H,60,ts);themeDecor(g,W,H,60,ts,'gacha');pxChest(g,97,74,ts);if(UITH!='milk'&&UITH!='firefly')for(let i=0;i<3;i++){if(Math.sin(ts/240+i*2.2)>0.2){g.fillStyle='#fff';const sx=60+i*36,sy=18+((i*13)%10);g.fillRect(sx,sy,1,3);g.fillRect(sx-1,sy+1,3,1)}}}
-let UITH=localStorage.getItem('dc_ui')||'star';const UITHEMES=[['star','星灯りの冒険端末'],['moon','月影の王国'],['milk','ミルク色のドット工房'],['crystal','水晶の遺跡'],['firefly','蛍火の探検手帳'],['classic','クラシック（従来）']];const UICLS={classic:'cls',milk:'mk',moon:'mn',crystal:'cr',firefly:'ff'};
+function gachaDraw(ts){const c=$('#gc');if(!c)return;const g=c.getContext('2d'),W=195,H=86;g.imageSmoothingEnabled=false;sceneBG(g,W,H,60,ts);themeDecor(g,W,H,60,ts,'gacha');pxChest(g,97,74,ts);if(UITH!='milk'&&UITH!='firefly'&&UITH!='sakura')for(let i=0;i<3;i++){if(Math.sin(ts/240+i*2.2)>0.2){g.fillStyle='#fff';const sx=60+i*36,sy=18+((i*13)%10);g.fillRect(sx,sy,1,3);g.fillRect(sx-1,sy+1,3,1)}}}
+let UITH=localStorage.getItem('dc_ui')||'star';const UITHEMES=[['star','星灯りの冒険'],['firefly','蛍火の探検手帳'],['sunset','夕焼けキャラバン'],['deepsea','深海の図書館'],['sakura','桜まい庭園']];if(!UITHEMES.some(x=>x[0]==UITH))UITH='star';const UICLS={firefly:'ff',sunset:'sn',deepsea:'ds',sakura:'sk'};
 function uiApply(){for(const k in UICLS)document.body.classList.remove(UICLS[k]);const c=UICLS[UITH];if(c)document.body.classList.add(c)}
 function uiV(){ov(`<div class="card" style="width:100%"><h3>UIを選ぶ</h3>${UITHEMES.map(([k,n])=>`<button class="btn ${UITH==k?'':'g'}" data-a="uith" data-i="${k}" style="min-width:210px">${n}${UITH==k?'（使用中）':''}</button>`).join('<br>')}<br><small>選んだUIはこの端末に保存されます。</small><br><button class="btn" data-a="cl">閉じる</button></div>`)}
 function setUI(k){UITH=k;localStorage.setItem('dc_ui',k);uiApply();cl();if(TT)titleM();else render()}
