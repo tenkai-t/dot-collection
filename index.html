@@ -50,7 +50,7 @@ img,canvas{image-rendering:pixelated}html,body{touch-action:manipulation}body{us
 .tmenu{position:relative;margin-top:auto;margin-bottom:21vh;display:flex;flex-direction:column;align-items:center;gap:1px}
 .tapb{position:fixed;inset:0;background:none;border:0;color:#fff;font:bold 16px monospace;display:flex;align-items:flex-end;justify-content:center;padding-bottom:30vh;text-shadow:2px 2px 0 #000}
 .bk{animation:bk 1.2s steps(2) infinite}@keyframes bk{50%{opacity:0}}
-select,label{font:inherit;color:#111;margin:2px}h3{margin:6px 0}small{opacity:.8}
+select{font:inherit;color:#111;margin:2px}label{font:inherit;color:var(--tx);margin:2px}h3{margin:6px 0}small{opacity:.8}
 
 #app{border-left:2px solid var(--gd);border-right:2px solid var(--gd);background:radial-gradient(1px 1px at 12% 22%,rgba(255,255,255,.5) 50%,transparent 51%),radial-gradient(1px 1px at 78% 8%,rgba(255,255,255,.4) 50%,transparent 51%),radial-gradient(1.5px 1.5px at 55% 64%,rgba(255,255,255,.28) 50%,transparent 51%),radial-gradient(1px 1px at 88% 44%,rgba(255,255,255,.35) 50%,transparent 51%),radial-gradient(1px 1px at 30% 82%,rgba(255,255,255,.25) 50%,transparent 51%),#0d1530}
 h3{color:var(--ac)}
@@ -132,7 +132,7 @@ if(e){if(e.lim<5&&!(S.as&&o.r<=1&&!o.sh&&!e.fav)){e.lim++;return{dup:1,u:e}}cons
 // ---- gacha
 const BN=[{n:'通常ガチャ',rate:[50,28,15,6,1],pity:100,c:50},{n:'ピックアップガチャ',rate:[48,27,15,7,3],pity:80,c:60}];
 const gt=()=>S.gt==1?1:0;
-const VER='1.01';
+const VER='1.02';
 function feat(){const w=Math.floor(Date.now()/604800000),p=(o,k)=>Math.floor(rnd(w*31+o+k*7)*100);let a=[p(1,0),p(1,1)];if(a[1]==a[0])a[1]=(a[1]+1)%100;let b=[p(5,0),p(5,1)];b=b.filter(x=>!a.includes(x));if(b.length<2)b=[(a[0]+17)%100,(a[1]+31)%100];return{f5:a,f4:b,left:7-Math.floor((Date.now()%604800000)/86400000)}}
 function rollR(min,b){const R=BN[b|0].rate,t=R.slice(min||0).reduce((a,x)=>a+x,0);let x=Math.random()*t,a=0;for(let i=min||0;i<5;i++){a+=R[i];if(x<a)return i}return 4}
 function rollSet(n,st,b){b=b|0;const pk=b==1?'pity2':'pity',F=feat(),out=[];let has=0;for(let i=0;i<n;i++){let r;if((st[pk]|0)>=BN[b].pity-1)r=4;else r=(n==10&&i==9&&!has)?rollR(2,b):rollR(0,b);if(r>=2)has=1;st[pk]=r==4?0:(st[pk]|0)+1;let c=Math.floor(Math.random()*100);
@@ -168,7 +168,7 @@ document.addEventListener('visibilitychange',()=>{if(AC){document.hidden?AC.susp
 // ---- UI
 let tab='home',sel=null,flt={e:'',r:'',s:0,o:'p',q:'',ro:'',fv:0},dexS=0,B=null,last=0;
 const TABS=[['home','ホーム'],['adv','冒険'],['gacha','ガチャ'],['party','編成'],['dex','図鑑'],['mis','任務']];
-const cardH=(u,x)=>`<div class="cell ${u.sh?'sh':''} ${x||''}" style="border-color:${RC[u.r]}" data-a="unit" data-i="${u.uid}"><img src="${icon(u.c,u.r,u.sh)}"><div>${CH[u.c].n}${u.fav?'♥':''}</div><div style="color:${RC[u.r]}">${RN[u.r]}${u.sh?'✦':''} Lv${u.lv}${u.lim?' +'+u.lim:''}</div><div style="font-size:10px;color:#9ab">${u.lv>=50?'EXP MAX':'次のLvまで あと'+(u.lv*150-(u.xp||0))}</div></div>`;
+const cardH=(u,x)=>`<div class="cell ${u.sh?'sh':''} ${x||''}" style="border-color:${RC[u.r]}" data-a="unit" data-i="${u.uid}"><img src="${icon(u.c,u.r,u.sh)}"><div>${CH[u.c].n}${u.fav?'♥':''}</div><div style="color:${RC[u.r]}">${RN[u.r]}${u.sh?'✦':''} Lv${u.lv}${u.lim?' +'+u.lim:''}</div><div>${ROLES[roleOf(u.c)]}・${EL[CH[u.c].e]}</div><div style="font-size:10px;color:#9ab">${u.lv>=50?'EXP MAX':'次のLvまで あと'+(u.lv*150-(u.xp||0))}</div></div>`;
 function render(){$('#gm').textContent='GEM '+S.gems;$('#mu').textContent=S.mute?'♪×':'♪';
 $('#tabs').innerHTML=TABS.map(t=>`<button class="${tab==t[0]?'on':tutTab()==t[0]?'hl':''}" data-a="tab" data-i="${t[0]}">${t[1]}${t[0]=='mis'&&misN()?'●':''}</button>`).join('');
 const m=$('#main');m.innerHTML=({home:vHome,adv:vAdv,gacha:vGacha,party:vParty,dex:vDex,mis:vMis})[tab]();if(tab=='adv'&&B)initCv();tutR();bgm()}
