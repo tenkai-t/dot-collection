@@ -132,7 +132,7 @@ if(e){if(e.lim<5&&!(S.as&&o.r<=1&&!o.sh&&!e.fav)){e.lim++;return{dup:1,u:e}}cons
 // ---- gacha
 const BN=[{n:'通常ガチャ',rate:[50,28,15,6,1],pity:100,c:50},{n:'ピックアップガチャ',rate:[48,27,15,7,3],pity:80,c:60}];
 const gt=()=>S.gt==1?1:0;
-const VER='1.06';
+const VER='2.0';
 function feat(){const w=Math.floor(Date.now()/604800000),p=(o,k)=>Math.floor(rnd(w*31+o+k*7)*100);let a=[p(1,0),p(1,1)];if(a[1]==a[0])a[1]=(a[1]+1)%100;let b=[p(5,0),p(5,1)];b=b.filter(x=>!a.includes(x));if(b.length<2)b=[(a[0]+17)%100,(a[1]+31)%100];return{f5:a,f4:b,left:7-Math.floor((Date.now()%604800000)/86400000)}}
 function rollR(min,b){const R=BN[b|0].rate,t=R.slice(min||0).reduce((a,x)=>a+x,0);let x=Math.random()*t,a=0;for(let i=min||0;i<5;i++){a+=R[i];if(x<a)return i}return 4}
 function rollSet(n,st,b){b=b|0;const pk=b==1?'pity2':'pity',F=feat(),out=[];let has=0;for(let i=0;i<n;i++){let r;if((st[pk]|0)>=BN[b].pity-1)r=4;else r=(n==10&&i==9&&!has)?rollR(2,b):rollR(0,b);if(r>=2)has=1;st[pk]=r==4?0:(st[pk]|0)+1;let c=Math.floor(Math.random()*100);
@@ -346,7 +346,7 @@ const ov=h=>{$('#ov').innerHTML=h;$('#ov').style.display='flex'},cl=()=>{$('#ov'
 function doPull(n){const bn=gt(),cost=n*BN[bn].c;if(S.gems<cost){ov('<div class="card">ジェムが足りません<br><button class="btn" data-a="cl">閉じる</button></div>');return}S.gems-=cost;const rs=rollSet(n,S,bn).map(x=>({...addUnit(x),x}));mis('pl',n);const p5=rs.filter(r=>r.x.pu&&r.x.r==4);p5.forEach(()=>mis('pu5'));save();render();
 const mx=Math.max(...rs.map(r=>r.x.r)),any=rs.some(r=>r.x.sh),pc=rs.filter(r=>r.x.pu).length;
 const show=()=>{const e=$('#rs');if(!e)return;$('#pil').style.display='none';e.style.display='block';e.innerHTML=(any?'<h3 style="text-align:center;color:#ffd23f">色が違う…！？ ✦</h3>':'')+(bn&&pc?`<h3 style="text-align:center;color:#ffd23f">★ PICK UP ${pc}体 ★</h3>`:'')+`<div class="grid ${n==1?'':'g4'}" style="${n==1?'width:40%;margin:auto':''}">${rs.map(r=>`<div class="cell ${r.x.sh?'sh grbw':''} ${r.x.pu?'pug':''}" style="border-color:${RC[r.x.r]}"><img src="${icon(r.x.c,r.x.r,r.x.sh)}"><div>${CH[r.x.c].n}</div><div style="color:${RC[r.x.r]}">${RN[r.x.r]}${r.x.sh?'✦':''}</div><div>${r.x.pu?'PICKUP ':''}${r.dup==0?'NEW':r.dup==1?'凸UP':'+'+r.g+'G'}</div></div>`).join('')}</div><div style="text-align:center"><button class="btn" data-a="cl">OK</button></div>`};
-gachaShow(rs,n,bn,mx,any,pc,show)}
+gaStart(rs,bn,show)}
 function gachaShow(rs,n,bn,mx,any,pc,show){let i=0,tm=[],done=false,rvd=false,tev=0;const upg=rs.findIndex(r=>r.x.r==4);
 const later=(f,ms)=>{tm.push(setTimeout(()=>{if(!done&&$('#gst'))f()},ms))};
 const flash=(cls,ms)=>{document.body.insertAdjacentHTML('beforeend',`<div class="${cls}"></div>`);setTimeout(()=>{const x=document.querySelector('.'+cls);x&&x.remove()},ms)};
@@ -385,6 +385,43 @@ const go=e=>{tev=e.timeStamp;st.onclick=null;const ge=$('#gst');if(ge)ge.onclick
 }
 }
 function oddsV(){ov(`<div class="card" style="width:100%"><h3>提供割合</h3>${BN.map(b=>`<b>${b.n}</b>（天井${b.pity}連・1回${b.c}GEM）<br>${RN.map((n,i)=>`${n} ${b.rate[i]}%`).join(' / ')}<br>`).join('')}ピックアップ：★5が出たとき50%が対象（前回外れていたら確定）、★4の30%が対象<br>色違い 1/512（約0.195%、レアリティと独立）／10連は★3以上を1体保証<br><button class="btn g" data-a="cl">閉じる</button></div>`)}
+let GA=null;
+const gsc=r=>r.x.r*10+(r.x.sh?5:0)+(r.x.pu?2:0),sp2=(g,x,col,px,py,k,sh)=>{g.save();g.translate(px,py);g.scale(2,2);spr(g,x.c,x.r,sh,col,0,0,k,false);g.restore()};
+function gaStart(rs,bn,show){const n=rs.length;GA={rs:[...rs],all:rs,bn,show,n,i:0,ph:n>1?'intro':'tease',t:0,k:-1,mx:Math.max(...rs.map(r=>r.x.r)),sh:0,fl:0,shake:0,dr:0,pt:[],col:RC[0]};
+ov(`<div style="width:100%;text-align:center"><canvas id="gc2" data-a="gnx" width="195" height="215" style="width:100%;max-width:390px;border:3px solid var(--ln)"></canvas><div id="gi" style="min-height:74px;margin-top:6px"></div>${n>1?'<button class="btn g" data-a="gall">全部開く</button>':''}</div>`);gaInfo()}
+function gaInfo(){const A=GA,e=$('#gi');if(!A||!e)return;const r=A.rs[A.i];if(A.ph!='show'){e.innerHTML='<small>'+(A.ph=='intro'?'…':'タップで演出スキップ')+'</small>';return}
+e.innerHTML=`<b style="font-size:16px">${CH[r.x.c].n}</b> <span style="color:${RC[r.x.r]}">${RN[r.x.r]}${r.x.sh?' ✦色違い':''}</span><br>${EL[CH[r.x.c].e]}属性 ／ ${ROLES[roleOf(r.x.c)]} ／ ${r.x.pu?'PICKUP ':''}${r.dup==0?'NEW!':r.dup==1?'凸UP':'+'+r.g+'G'}<br>${A.n==1?'<button class="btn" data-a="gall">OK</button>':'<small>'+(A.i+1)+'/'+A.n+'　タップで次へ</small>'}`}
+function gaEnd(){const A=GA;if(!A)return;GA=null;ov('<div style="width:100%"><div id="pil" style="display:none"></div><div id="rs" style="display:none;width:100%"></div></div>');if(A.show)A.show()}
+function gaNext(){const A=GA;A.i++;if(A.i>=A.n){gaEnd();return}A.ph='tease';A.t=0;A.k=-1;A.sh=0;A.pt=[];gaInfo()}
+function gaSkip(){const A=GA;if(!A)return;if(A.ph=='intro'){A.ph='tease';A.t=0;A.k=-1;return}A.ph='show';A.t=0;A.sh=A.rs[A.i].x.sh?1:0;gaInfo()}
+function gaFan(u){const r=u.x.r;jin([[72,76],[72,76],[72,76,79],[72,76,79,84],[72,76,79,84,88,91]][r]);if(r==4){GA.fl=1;GA.shake=.4;if(u.x.pu){document.body.insertAdjacentHTML('beforeend','<div class="gbw"></div>');setTimeout(()=>{const x=document.querySelector('.gbw');x&&x.remove()},1900)}}}
+function gaUpd(dt){const A=GA,u=A.rs[A.i];if(!u)return;A.t+=dt;
+if(A.ph=='intro'||A.ph=='tease'){const full=A.ph=='intro'||A.n==1,d=full?1.5:.45,tr=A.ph=='intro'?A.mx:u.x.r,k=Math.min(tr,Math.floor(A.t/d*(tr+1)));
+if(k!=A.k){A.k=k;snd(380+k*110,.14,'triangle')}A.col=RC[Math.max(0,A.k)];if(full){A.dr-=dt;if(A.dr<=0){A.dr=.08;snd(100+Math.random()*30,.04,'square')}}
+if(A.t>=d){if(A.ph=='intro'){A.ph='tease';A.t=0;A.k=-1}else{A.ph='walk';A.t=0;snd(520,.1)}}}
+else if(A.ph=='walk'){if(A.t>=.8){A.ph='pose';A.t=0;gaFan(u)}}
+else if(A.ph=='pose'){const d=(u.x.r>=3?1:.4)+(u.x.sh?.7:0)+(u.x.r==4?.3:0);
+if(u.x.sh&&!A.sh&&A.t>=.5){A.sh=1;A.fl=1;A.shake=.3;snd(900,.5,'sawtooth');for(let i=0;i<16;i++)A.pt.push({x:97+(Math.random()-.5)*70,y:120+(Math.random()-.5)*50,vy:-20-Math.random()*30,c:'#fff',l:1,s:1});document.body.insertAdjacentHTML('beforeend','<div class="rbw"></div>');setTimeout(()=>{const x=document.querySelector('.rbw');x&&x.remove()},1700)}
+if(A.t>=d){A.ph='show';A.t=0;A.sh=u.x.sh?1:0;gaInfo()}}}
+function gaDraw(dt,ts){const c=$('#gc2'),A=GA;if(!c||!A)return;const u=A.rs[A.i];if(!u)return;const g=c.getContext('2d'),W=195,H=215,r=u.x.r;g.imageSmoothingEnabled=false;
+const sx=A.shake>0?(Math.random()-.5)*5:0,sy=A.shake>0?(Math.random()-.5)*5:0;if(A.shake>0)A.shake-=dt;
+g.save();g.translate(sx,sy);g.fillStyle='#0b1030';g.fillRect(-6,-6,W+12,H+12);g.fillStyle='#161d4a';g.fillRect(-6,172,W+12,H);
+for(let i=0;i<24;i++){if(Math.sin(ts/260+i*7)>0){g.fillStyle='#fff';g.fillRect((i*37)%W,(i*53)%150,1,1)}}
+const tea=A.ph=='intro'||A.ph=='tease',col=tea?A.col:RC[r];
+g.strokeStyle=col;g.lineWidth=1;g.setLineDash([5,4]);g.lineDashOffset=-ts/60;g.beginPath();g.ellipse(97,176,52,11,0,0,7);g.stroke();g.setLineDash([]);
+let pw=0;if(tea)pw=7+Math.max(0,A.k)*5+Math.sin(ts/50)*2;else if(A.ph=='walk')pw=10*(1-A.t/.8);else if(A.ph=='pose'&&A.t<.3)pw=(.3-A.t)*30;
+if(pw>0){g.globalAlpha=.35;g.fillStyle=col;g.fillRect(97-pw,0,pw*2,176);g.globalAlpha=.9;g.fillStyle='#fff';g.fillRect(97-pw/3,0,pw*2/3,176);g.globalAlpha=1}
+if(tea&&Math.random()<.7)A.pt.push({x:97+(Math.random()-.5)*60,y:176,vy:-(40+Math.random()*60),c:col,l:1});
+A.pt=A.pt.filter(p=>p.l>0);for(const p of A.pt){p.y+=p.vy*dt;p.l-=dt*(p.s?1.2:.8);g.globalAlpha=Math.max(0,p.l);g.fillStyle=p.c;g.fillRect(p.x,p.y,2,2)}g.globalAlpha=1;
+const dsh=A.ph=='show'?!!u.x.sh:A.ph=='pose'?!!A.sh:false;let X=73,cl2=0;
+if(A.ph=='walk'){X=-30+103*Math.min(1,A.t/.8);cl2=[3,4,3,5][(A.t*8|0)%4]}else if(A.ph=='pose'&&r>=3)cl2=9+((A.t*9|0)%4);
+if(A.ph=='walk'||A.ph=='pose'||A.ph=='show'){g.fillStyle='rgba(0,0,0,.3)';g.fillRect(X+8,174,32,4);sp2(g,u.x,cl2,X,142,0,dsh)}
+if(A.ph=='pose'&&r==4&&A.t<1.1){const w=Math.min(1,A.t/.2)*W;g.fillStyle='rgba(0,0,0,.7)';g.fillRect(0,78,w,34);g.fillStyle='#ffd23f';g.fillRect(0,78,w,2);g.fillRect(0,110,w,2);
+if(A.t>.2){g.font='bold 15px monospace';g.textAlign='center';g.lineWidth=3;g.strokeStyle='#a30';g.strokeText(CH[u.x.c].n+' 参上！',97,100);g.fillStyle='#fff';g.fillText(CH[u.x.c].n+' 参上！',97,100);if(u.x.pu){g.font='bold 11px monospace';g.fillStyle='#ffd23f';g.fillText('★ PICK UP ★',97,70)}}}
+if(A.ph=='show'||(A.ph=='pose'&&A.t>.5)){g.font='bold 11px monospace';g.textAlign='center';g.fillStyle=RC[r];g.fillText(RN[r]+(u.x.sh&&A.sh?' ✦':''),97,200)}
+if(A.fl>0){g.fillStyle='rgba(255,255,255,'+Math.min(1,A.fl)+')';g.fillRect(-6,-6,W+12,H+12);A.fl-=dt*2}
+g.restore()}
+
 function dexV(i){const mot={ko:[0,[0,1,2,3],1],cast:[1,[4,5,6,7],1],atk:[0,[9,10,11,12],0],hurt:[0,[13,14],0]};let cur='atk',k=dexS?1:0;
 ov(`<div class="card" style="width:100%"><b>${CH[i].n}</b> ${EL[CH[i].e]}属性 / ${ROLES[roleOf(i)]}<br><canvas id="dcv" width="96" height="20" style="width:100%"></canvas><br><canvas id="dc2" width="24" height="20" style="width:40%"></canvas><br><b>スキル「${EL[CH[i].e]}の${SK2[roleOf(i)][skillOf(i)].n}」</b> ${skD(i)}<br><small>★3以上で使用可（★3・★4は3回ごと、★5は2回ごと）</small><br><b>属性スキル「${ESK[CH[i].e].n}」</b> ${ESK[CH[i].e].d}<br><small>役割スキルと交互に発動 ／ スキルLvで効果+10%/Lv</small><br><table style="width:100%;font-size:11px;text-align:center"><tr><td>Lv1</td><td>HP</td><td>ATK</td><td>DEF</td><td>SPD</td></tr>${[0,1,2,3,4].map(r=>{const x=stats({c:i,r,sh:!!dexS,lv:1,lim:0});return`<tr style="color:${RC[r]}"><td>${RN[r]}</td><td>${x.hp|0}</td><td>${x.atk|0}</td><td>${x.def|0}</td><td>${x.spd.toFixed(1)}</td></tr>`}).join("")}</table><small>Lv・凸で上昇／色違いは+10%</small><br>${['atk','hurt','cast','ko'].map(m=>`<button class="btn g" data-a="mo" data-i="${m}">${{atk:'攻撃',hurt:'被弾',cast:'魔法',ko:'倒れる'}[m]}</button>`).join('')}<br><button class="btn" data-a="cl">閉じる</button></div>`);
 const g=$('#dcv').getContext('2d'),g2=$('#dc2').getContext('2d'),r=dexS?4:0;[0,3,6].forEach((c,j)=>spr(g,i,r,!!dexS,c,j*24,0,0));let f=0;window.setMot=m=>{cur=m;f=0};
@@ -553,7 +590,7 @@ for(const f of B.fx){const fr=Math.min(7,f.t/.7*8|0);g.drawImage(IM.f,fr*32,f.ro
 const wr=th[1],wf=(B.t*12|0)%16;if(wr==9){const a=[0,0,0,0,.8,.25,.6,.1,0,0,0,0,0,0,0,0][wf];if(a){g.globalAlpha=a;g.fillStyle='#fff';g.fillRect(0,0,195,190);g.globalAlpha=1}}else for(let y=0;y<6;y++)for(let x=0;x<7;x++)g.drawImage(IM.w,wf*32,wr*32,32,32,x*32,y*32,32,32);
 g.textAlign='center';g.lineJoin='round';for(const p of B.pp){g.font='bold '+(DZ[0]+(p.cr?3:0))+'px monospace';g.lineWidth=2.5;g.strokeStyle='#000';g.strokeText(p.s,p.x,p.y-p.t*14);g.fillStyle=p.c;g.fillText(p.s,p.x,p.y-p.t*14)}
 $('#bl').textContent=blT();}
-function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;if(ts-lb>500){lb=ts;bgm()}if(TT)titleDraw(dt,ts);else if(tab=='home')homeDraw(ts);else if(tab=='gacha')gachaDraw(ts);if(tab=='adv'&&B&&$('#cv')){B.t+=dt;upd(dt*B.spd);draw()}requestAnimationFrame(loop)}
+function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;if(ts-lb>500){lb=ts;bgm()}if(TT)titleDraw(dt,ts);else if(tab=='home')homeDraw(ts);else if(tab=='gacha')gachaDraw(ts);if(GA){gaUpd(dt);if(GA)gaDraw(dt,ts)}if(tab=='adv'&&B&&$('#cv')){B.t+=dt;upd(dt*B.spd);draw()}requestAnimationFrame(loop)}
 // ---- events
 document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,i=t.dataset.i;UNL=1;ac();snd(440,.05);
 if(a=='tab'){tab=i;render()}else if(a=='uiv'){uiV()}else if(a=='uith'){setUI(i)}else if(a=='login'){S.gems+=300;mis('lg');S.login=new Date().toDateString();save();render()}
@@ -594,7 +631,7 @@ else if(a=='nm'){me().n=esc($('#nm').value)||'プレイヤー';save();frdV()}
 else if(a=='fcp'){const x=$('#fo');x.select();let ok=0;try{ok=document.execCommand('copy')}catch(e){}if(!ok&&navigator.clipboard)navigator.clipboard.writeText(x.value).then(()=>$('#fm').textContent=' コピーしました',()=>{});else $('#fm').textContent=ok?' コピーしました':' 選択しました。長押しでコピーしてください'}
 else if(a=='fadd'){try{const f=fparse($('#fi').value);if(f.id==me().id)throw 1;S.fr=S.fr||[];const k=S.fr.findIndex(x=>x.id==f.id);if(k>=0)S.fr[k]=f;else if(S.fr.length>=20){$('#fe').textContent='フレンドは20人までです';return}else S.fr.push(f);save();frdV()}catch(e){$('#fe').textContent='追加できません（コードが違うか、自分のコードです）'}}
 else if(a=='fdel'){S.fr.splice(+i,1);if(S.hp&&!S.fr.some(x=>x.id==S.hp))S.hp='';save();frdV()}
-else if(a=='dgo'){cl();FM=0;startDg(+i)}else if(a=='dgf'){cl();if(dgLeft(+i)>0){FM=1;FN=0;FG=0;startDg(+i)}}else if(a=='twgo'){cl();FM=0;startTw()}else if(a=='crf'){craftV(+i)}else if(a=='crm'){const st=(+i/10)|0,sl=+i%10,cost=st==3?8:25;if((S.frg|0)>=cost){S.frg-=cost;mkItem(st-1,sl);save();craftV(st)}}else if(a=='bk'){bkUse(+i,1)}else if(a=='bkx'){bkUse(+i,10)}else if(a=='ssu'){ssuUse(+i)}else if(a=='eqo'){eqV((+i/10)|0,+i%10)}else if(a=='eqa'){eqAuto()}else if(a=='eqs'){eqSet(+i)}else if(a=='equ'){eqOff()}else if(a=='itv'){itV(+i)}else if(a=='itb'){eqV(EQCTX.uid,EQCTX.slot)}else if(a=='equb'){unitV(EQCTX.uid)}else if(a=='enh'){itEnh()}else if(a=='rfn'){itRef()}else if(a=='sal'){itSal()}else if(a=='esl'){itSell()}else if(a=='farm'){cl();FM=1;FN=0;FG=0;startB(+i)}
+else if(a=='dgo'){cl();FM=0;startDg(+i)}else if(a=='dgf'){cl();if(dgLeft(+i)>0){FM=1;FN=0;FG=0;startDg(+i)}}else if(a=='twgo'){cl();FM=0;startTw()}else if(a=='crf'){craftV(+i)}else if(a=='crm'){const st=(+i/10)|0,sl=+i%10,cost=st==3?8:25;if((S.frg|0)>=cost){S.frg-=cost;mkItem(st-1,sl);save();craftV(st)}}else if(a=='bk'){bkUse(+i,1)}else if(a=='bkx'){bkUse(+i,10)}else if(a=='ssu'){ssuUse(+i)}else if(a=='eqo'){eqV((+i/10)|0,+i%10)}else if(a=='eqa'){eqAuto()}else if(a=='gnx'){if(GA){if(GA.ph=='show'){if(GA.n==1)gaEnd();else gaNext()}else gaSkip()}}else if(a=='gall')gaEnd();else if(a=='eqs'){eqSet(+i)}else if(a=='equ'){eqOff()}else if(a=='itv'){itV(+i)}else if(a=='itb'){eqV(EQCTX.uid,EQCTX.slot)}else if(a=='equb'){unitV(EQCTX.uid)}else if(a=='enh'){itEnh()}else if(a=='rfn'){itRef()}else if(a=='sal'){itSal()}else if(a=='esl'){itSell()}else if(a=='farm'){cl();FM=1;FN=0;FG=0;startB(+i)}
 else if(a=='fstop'){FM=0;if(B&&B.st=='win'){B.res=winH();const e=$('#bres');if(e)e.innerHTML=B.res}}
 else if(a=='as'){S.as=S.as?0:1;save();render()}
 else if(a=='pt'){const id=+i;let p=[0,1,2,3,4].map(k=>S.party[k]||null);if(p.includes(id))p=p.map(x=>x==id?null:x);else{const e=p.indexOf(null);p[e<0?4:e]=id}S.party=p;save();cl();render()}
