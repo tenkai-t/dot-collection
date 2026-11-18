@@ -151,7 +151,7 @@ if(e){if(e.lim<5&&!(S.as&&o.r<=1&&!o.sh&&!e.fav)){e.lim++;return{dup:1,u:e}}cons
 // ---- gacha
 const BN=[{n:'通常ガチャ',rate:[50,28,15,6,1],pity:100,c:50},{n:'ピックアップガチャ',rate:[48,27,15,7,3],pity:80,c:60}];
 const gt=()=>S.gt==1?1:0;
-const VER='2.03';
+const VER='2.04';
 function feat(){const w=Math.floor(Date.now()/604800000),p=(o,k)=>Math.floor(rnd(w*31+o+k*7)*100);let a=[p(1,0),p(1,1)];if(a[1]==a[0])a[1]=(a[1]+1)%100;let b=[p(5,0),p(5,1)];b=b.filter(x=>!a.includes(x));if(b.length<2)b=[(a[0]+17)%100,(a[1]+31)%100];return{f5:a,f4:b,left:7-Math.floor((Date.now()%604800000)/86400000)}}
 function rollR(min,b){const R=BN[b|0].rate,t=R.slice(min||0).reduce((a,x)=>a+x,0);let x=Math.random()*t,a=0;for(let i=min||0;i<5;i++){a+=R[i];if(x<a)return i}return 4}
 function rollSet(n,st,b){b=b|0;const pk=b==1?'pity2':'pity',F=feat(),out=[];let has=0;for(let i=0;i<n;i++){let r;if((st[pk]|0)>=BN[b].pity-1)r=4;else r=(n==10&&i==9&&!has)?rollR(2,b):rollR(0,b);if(r>=2)has=1;st[pk]=r==4?0:(st[pk]|0)+1;let c=Math.floor(Math.random()*100);
@@ -361,11 +361,11 @@ function sprU(g2,u,col,x,y,fl){spr(g2,u.c,u.r,u.sh,col,x,y,0,fl);const acc=uAcc(
 const ICE={};function iconE(u){const acc=uAcc(u);if(!acc)return icon(u.c,u.r,u.sh);const key=[u.c,u.r,u.sh,acc.join()].join();if(ICE[key])return ICE[key];const cv=document.createElement('canvas');cv.width=24;cv.height=20;const g2=cv.getContext('2d');drawAccFeet(g2,acc,0,0);spr(g2,u.c,u.r,u.sh,0,0,0,0);drawAccTop(g2,acc,0,0,0);return ICE[key]=cv.toDataURL()}
 const ICI={};function itemIcon(t,r){const key=t+'_'+r;if(ICI[key])return ICI[key];const cv=document.createElement('canvas');cv.width=24;cv.height=20;const g2=cv.getContext('2d');const acc=[-1,-1,-1];acc[t]=r;if(t==2)drawAccFeet(g2,acc,0,-8);else if(t==0)drawAccTop(g2,acc,-4,6,1);else drawAccTop(g2,acc,0,4,1);return ICI[key]=cv.toDataURL()}
 // ---- tutorial
-const TUT=[{tab:'home',x:'ようこそ！100体のドット絵キャラを集めて編成し、オートで戦う収集ゲームです。流れを4ステップで案内します。'},
+const TUT=[{tab:'home',x:'ようこそ！100体のドット絵キャラを集めて編成し、オートで戦う収集ゲームです。流れを6ステップで案内します。'},
 {tab:'party',x:'① 編成：前衛3・後衛2に5体を並べます。「おまかせ配置」で自動配置。枠をタップ→ユニットをタップでも変更できます。'},
-{tab:'adv',x:'② 出撃：第1章の「出撃」でオート戦闘。味方をタップするとスキルを使えます（★3以上）。勝つとジェムとLvが上がります。'},
+{tab:'adv',x:'② 出撃：第1章の「出撃」でオート戦闘。味方をタップするとスキルを使えます（★3以上）。敵を倒すと経験値が入り、Lvが上がります。'},
 {tab:'gacha',x:'③ ガチャ：ジェムでユニットを引こう。★が多いほど強く、ごく稀に色違い（1/512）も出ます。10連は★3以上が1体確定です。'},
-{tab:'mis',x:'④ 任務：毎日のミッションでジェムがもらえます。ログインボーナスはホームから。以上です！'}];
+{tab:'mis',x:'④ 任務：毎日のミッションでジェムがもらえます。ログインボーナスはホームから。'},{tab:'party',x:'⑤ 育成と装飾品：キャラをタップすると詳細が開きます。装飾品は3枠まで付けられ、冒険やダンジョンで手に入ります。属性スキルは役割スキルと交互に発動。経験の書と属性の石でも育てられます。'},{tab:'adv',x:'⑥ ダンジョンと塔：曜日ダンジョンでは素材・装飾品・経験の書が手に入ります。無限の塔ではどこまで登れるか挑戦できます。以上です！'}];
 const tutTab=()=>S&&S.tut!==undefined&&S.tut<TUT.length?TUT[S.tut].tab:'';
 function tutR(){const e=$('#tut'),k=S.tut;if(k===undefined||k>=TUT.length){e.style.display='none';return}const t=TUT[k];e.style.display='block';
 e.innerHTML=`<div class="card" style="margin:0;border-color:#ffd23f"><b>チュートリアル ${k+1}/${TUT.length}</b><br>${t.x}<br><small>${tab==t.tab?'この画面で触ってみましょう':'光っているタブで移動できます'}</small><br><button class="btn" data-a="tn">${k==TUT.length-1?'完了（+100GEM）':'次へ'}</button><button class="btn g" data-a="ts">スキップ</button></div>`}
