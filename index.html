@@ -151,7 +151,7 @@ if(e){if(e.lim<5){e.lim++;return{dup:1,u:e}}const g=[5,15,50,150,250][o.r]*(o.sh
 // ---- gacha
 const BN=[{n:'通常ガチャ',rate:[50,28,15,6,1],pity:100,c:100},{n:'ピックアップガチャ',rate:[48,27,15,7,3],pity:80,c:150}];
 const gt=()=>S.gt==1?1:0;
-const VER='1.01';
+const VER='1.02';
 function feat(){const w=Math.floor(Date.now()/604800000),p=(o,k)=>Math.floor(rnd(w*31+o+k*7)*100);let a=[p(1,0),p(1,1)];if(a[1]==a[0])a[1]=(a[1]+1)%100;let b=[p(5,0),p(5,1)];b=b.filter(x=>!a.includes(x));if(b.length<2)b=[(a[0]+17)%100,(a[1]+31)%100];return{f5:a,f4:b,left:7-Math.floor((Date.now()%604800000)/86400000)}}
 function rollR(min,b){const R=BN[b|0].rate,t=R.slice(min||0).reduce((a,x)=>a+x,0);let x=Math.random()*t,a=0;for(let i=min||0;i<5;i++){a+=R[i];if(x<a)return i}return 4}
 function rollSet(n,st,b){b=b|0;const pk=b==1?'pity2':'pity',F=feat(),out=[];let has=0;for(let i=0;i<n;i++){let r;if((st[pk]|0)>=BN[b].pity-1)r=4;else r=(n==10&&i==9&&!has)?rollR(2,b):rollR(0,b);if(r>=2)has=1;st[pk]=r==4?0:(st[pk]|0)+1;let c=Math.floor(Math.random()*100);
@@ -587,7 +587,7 @@ let PSOPEN=false;function presetCard(){const rows=prs().map((x,k)=>`<div style="
 // ---- battle
 function pos(side,slot){const f=slot<3,x=f?70:30,y=f?[50,95,140][slot]:[72,118,160][slot-3];return[side?195-x:x,y]}
 function mkU(c,r,sh,lv,lim,side,slot,mul,src){const s=stats(src||{c,r,sh,lv,lim}),p=pos(side,slot),q=src?eqx(src):{crit:0,red:0,g0:0};return{c,r,sh,lv,side,slot,hp:s.hp*mul,mhp:s.hp*mul,atk:s.atk*(mul>1?1+(mul-1)*.4:1),def:s.def,spd:s.spd,g:q.g0+Math.random()*40,sp:(lim>=4&&r>=2)?1:0,lim,an:'idle',at:0,x:p[0],y:p[1],buff:0,db:0,dead:0,el:CH[c].e,ro:roleOf(c),ph:Math.random(),slv:src?src.slv|0:0,crit:.1+q.crit,red:q.red,acc:src?uAcc(src):null,alt:0}}
-const TIER=[{n:'初級',lv:10,r:1,f:.7,eq:.3,er:[0,1],g:60,st:2,frg:0},{n:'中級',lv:24,r:2,f:1.3,eq:.5,er:[1,2],g:150,st:3,frg:1},{n:'上級',lv:40,r:3,f:2.2,eq:.7,er:[2,3],g:320,st:5,frg:2}];
+const TIER=[{n:'初級',lv:10,r:1,f:.7,eq:.3,er:[0,1],g:60,st:2,frg:0},{n:'中級',lv:24,r:2,f:1.3,eq:.5,er:[1,2],g:150,st:3,frg:1},{n:'上級',lv:58,r:4,f:2.5,eq:.7,er:[2,3],g:320,st:5,frg:2},{n:'超級',lv:88,r:4,f:3.4,eq:.8,er:[0,1],g:600,st:7,frg:3}];
 const WDE=['all','fire','ice','thunder','heal','dark','holy'];
 const TWM={10:500,20:1000,30:1500,50:3000,75:5000,100:10000};
 const todayS=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
@@ -601,7 +601,7 @@ if(f%5==0){S.ore=(S.ore|0)+3;S.frg=(S.frg|0)+(f>=50?2:1);if(Math.random()<.35)mk
 if(f%10==0){const e=Object.keys(EL)[Math.floor(Math.random()*6)];S.sk=S.sk||{};S.sk[e]=(S.sk[e]|0)+2}
 b.al.forEach(u=>{if(!u.dead)u.hp=Math.min(u.mhp,u.hp+u.mhp*.2)});b.pp.push({x:97,y:60,t:0,s:f+'階クリア +'+g+' GEM',c:'#ffd23f'});b.fl++;b.st='next';b.nt=1.2;save()}
 function winDg(){const b=B,T=TIER[b.tier],el=WDE[new Date().getDay()],e=el=='all'?Object.keys(EL)[Math.floor(Math.random()*6)]:el,hb=b.hp?30:0;if(b.hp)mis('fr');const d=dm();d.dg=d.dg||{};d.dg[b.tier]=(d.dg[b.tier]|0)+1;
-const t=T.g+hb;S.gems+=t;const ore=[2,4,8][b.tier];S.ore=(S.ore|0)+ore;const bk=b.tier==0?(Math.random()<.5?1:0):b.tier==1?1:2;S.bk=(S.bk|0)+bk;S.frg=(S.frg|0)+T.frg;S.sk=S.sk||{};S.sk[e]=(S.sk[e]|0)+T.st;const it=[];if(Math.random()<T.eq)it.push(mkItem(Math.min(1,T.er[Math.random()<.5?0:1])));
+const t=T.g+hb;S.gems+=t;const ore=[2,4,8,12][b.tier];S.ore=(S.ore|0)+ore;const bk=b.tier==0?(Math.random()<.5?1:0):b.tier==1?1:b.tier==2?2:3;S.bk=(S.bk|0)+bk;S.frg=(S.frg|0)+T.frg;S.sk=S.sk||{};S.sk[e]=(S.sk[e]|0)+T.st;const it=[];if(Math.random()<T.eq)it.push(mkItem(Math.min(1,T.er[Math.random()<.5?0:1])));
 save();b.st='win';b.win={t,bk,ore,st:T.st,el:e,it,frg:T.frg};jin([72,76,79,84]);
 if(FM){FN++;FG+=t;if(dgLeft(b.tier)>0)setTimeout(()=>{if(FM&&B===b&&b.st=='win'&&tab=='adv')startDg(b.tier)},1800);else FM=0}
 b.res=winDgH();const x=$('#bres');if(x)x.innerHTML=b.res}
