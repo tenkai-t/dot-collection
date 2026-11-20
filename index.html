@@ -151,7 +151,7 @@ if(e){if(e.lim<5){e.lim++;return{dup:1,u:e}}const g=[5,15,50,150,250][o.r]*(o.sh
 // ---- gacha
 const BN=[{n:'通常ガチャ',rate:[50,28,15,6,1],pity:100,c:100},{n:'ピックアップガチャ',rate:[48,27,15,7,3],pity:80,c:150}];
 const gt=()=>S.gt==1?1:0;
-const VER='1.0';
+const VER='1.01';
 function feat(){const w=Math.floor(Date.now()/604800000),p=(o,k)=>Math.floor(rnd(w*31+o+k*7)*100);let a=[p(1,0),p(1,1)];if(a[1]==a[0])a[1]=(a[1]+1)%100;let b=[p(5,0),p(5,1)];b=b.filter(x=>!a.includes(x));if(b.length<2)b=[(a[0]+17)%100,(a[1]+31)%100];return{f5:a,f4:b,left:7-Math.floor((Date.now()%604800000)/86400000)}}
 function rollR(min,b){const R=BN[b|0].rate,t=R.slice(min||0).reduce((a,x)=>a+x,0);let x=Math.random()*t,a=0;for(let i=min||0;i<5;i++){a+=R[i];if(x<a)return i}return 4}
 function rollSet(n,st,b){b=b|0;const pk=b==1?'pity2':'pity',F=feat(),out=[];let has=0;for(let i=0;i<n;i++){let r;if((st[pk]|0)>=BN[b].pity-1)r=4;else r=(n==10&&i==9&&!has)?rollR(2,b):rollR(0,b);if(r>=2)has=1;st[pk]=r==4?0:(st[pk]|0)+1;let c=Math.floor(Math.random()*100);
@@ -480,7 +480,7 @@ function rkOnV(by){by=by||rcat||'pw';rcat=by;ov('<div class="card" style="width:
 fetch(FRAPI+'/ranking?by='+by+'&id='+encodeURIComponent(me().id)).then(r=>r.json()).then(j=>{if(!j.ok)throw 0;const cn=(SCN.find(x=>x[0]==by)||[])[1]||'';const mid=me().id;const rows=j.list.map((e,i)=>'<div class="card" style="'+(e.i==mid?'border-color:#ffd23f':'')+'">'+(i+1)+'位 <b>'+e.n+'</b>'+(e.i==mid?'（自分）':'')+' '+cn+' <b>'+e.v[by]+'</b></div>').join('');ov('<div class="card" style="width:100%"><h3>ランキング</h3>'+SCN.map(function(x){return '<button class="btn '+(by==x[0]?'':'g')+'" data-a="rkon" data-i="'+x[0]+'" style="padding:4px 8px">'+x[1]+'</button>'}).join('')+'<br>'+(j.myrank?'<div class="card" style="border-color:#ffd23f">あなたは '+j.total+' 人中 <b>'+j.myrank+' 位</b>（'+cn+' '+j.myv+'）</div>':'<div><small>自分の順位はまだ登録されていません</small></div>')+(rows||'<div>まだデータがありません</div>')+'<hr><button class="btn g" data-a="cl">閉じる</button></div>')}).catch(function(){ov('<div class="card" style="width:100%"><h3>ランキング</h3><div>通信できませんでした</div><hr><button class="btn g" data-a="cl">閉じる</button></div>')})}
 
 const LCAP=[20,40,60,80,100];
-const LCL=[10,15,20,25,30,35,40,46,60,76],LCM=[.75,.8,.85,.9,.95,1,1.05,1.12,1.7,2.3],LCR=[0,0,1,1,1,1,1,1,1,1],LCT=[0,4,8,12,16,20,24,28,32,36];
+const LCL=[10,15,20,28,34,41,47,50,62,78],LCM=[.75,.82,.88,1.18,1.21,1.25,1.28,1.32,1.85,2.45],LCR=[0,0,1,1,1,1,1,1,1,1],LCT=[0,4,8,12,16,20,24,28,32,36];
 const LCRW=[{f:2},{b:1},{st:3},{f:3},{b:2},{st:4},{f:4},{b:3},{st:5},{f:6,b:2}];
 function lcCard(){const c=S.lc|0;let h='<div class="card"><h3>★3以下チャレンジ</h3><small>★3以下だけで挑む特別な戦い。★3は編成に1体まで。助っ人は参加しません。初回クリアで装飾の欠片・経験の書・属性の石がもらえます。</small><div style="margin-top:8px">';for(let s=0;s<10;s++){h+='<button class="btn'+(s<c?' g':'')+'" data-a="lco" data-i="'+s+'"'+(s<=c?'':' disabled')+'>第'+(s+1)+'戦'+(s<c?' ✔':'')+'</button> '}return h+'</div><small>敵の強さ： 第1戦 Lv'+LCL[0]+'〜 → 第10戦 Lv'+LCL[9]+'〜 ／ クリア '+c+' / 10</small></div>'}
 function startLc(s){const pt=[0,1,2,3,4].map(i=>U(S.party[i])).filter(Boolean);if(!pt.length)return;if(pt.some(u=>u.r>2)){ov('<div class="card" style="width:100%"><b>編成エラー</b><br>★3以下チャレンジには ★4以上のユニットは参加できません。<br><button class="btn" data-a="cl">閉じる</button></div>');return}if(pt.filter(u=>u.r==2).length>1){ov('<div class="card" style="width:100%"><b>編成エラー</b><br>★3のユニットは1体までです。<br><button class="btn" data-a="cl">閉じる</button></div>');return}startMode('lc',s);if(B){B.ch=LCT[s];B.lc=s}}
